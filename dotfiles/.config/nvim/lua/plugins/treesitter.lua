@@ -20,7 +20,7 @@ local M = {
         autopairs = { enable = true },
         autotag = { enable = true },
         indent = { enable = true },
-        ensure_installed = "",
+        ensure_installed = "all",
         sync_install = true,
         ignore_install = {}, -- List of parsers to ignore installation
         refactor = {
