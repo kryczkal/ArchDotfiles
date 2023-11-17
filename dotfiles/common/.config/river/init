@@ -1,6 +1,7 @@
 #!/bin/sh
 
-
+kanshi &
+waybar &
 # riverctl declare-mode launcher
 # riverctl map normal Mod4 d enter-mode launcher
 # riverctl map launcher None f spawn firefox
