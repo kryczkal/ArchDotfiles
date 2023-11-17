@@ -1,0 +1,60 @@
+{
+    "layer": "top",
+        "height": 10,
+        "modules-left": ["custom/arch", "river/tags", "river/window" ],
+        "modules-center": [""],
+        "modules-right": ["pulseaudio", "custom/separator", 
+        "temperature", "custom/separator",
+        "cpu", "custom/separator",
+        "memory","custom/separator", 
+        "network","custom/separator",
+        "tray"],
+        "custom/arch": {
+            "format": " ",
+        },
+        "river/tags": {
+            "num-tags": 9,
+        },
+        "river/window": {
+            "format": "{}",
+        },
+        "network": {
+            "interval" : 3,
+            "format-wifi": "Net: {essid} Down: {bandwidthDownBytes} Up: {bandwidthUpBytes}",
+            "format-ethernet": "Net: Down: {bandwidthDownBytes} Up: {bandwidthUpBytes}",
+            "tooltip-format": "{ifname} via {gwaddr}",
+            "format-linked": "{ifname} (No IP)",
+            "format-disconnected": "Disconnected ⚠",
+            "format-alt": "{ifname}: {ipaddr}/{cidr}"
+        },
+        "pulseaudio": {
+            "on-click": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
+            "format": "Vol: {volume}%",
+            "format-muted": "Vol: muted",
+            "on-click-right"  : "pavucontrol"
+        },
+        "memory": {
+            "interval": 3,
+            "format": "Mem: {}%",
+        },
+        "tray": {
+            "icon-size": 20,
+            "reverse-direction": true,
+            "spacing": 6
+        },
+        "cpu": {
+            "interval": 3,
+            "format": "Cpu: {usage}%"
+        },
+        "temperature": {
+            "interval": 3,
+            "hwmon-path": "/sys/class/hwmon/hwmon3/temp1_input",
+            "critical-threshold": 80,
+            "format": "Temp {temperatureC}°C",
+        },
+        "custom/separator": {
+            "format": "|",
+            "interval": "once",
+            "tooltip": false
+        },
+}

@@ -24,7 +24,20 @@ while true; do
         echo "Invalid response. Please answer yes or no."
     fi
 done
-echo 'export XDG_SESSION_TYPE=wayland' >> ~/.profile
+append_if_not_exists() {
+    local string_to_append="$1"
+    local target_file="$2"
 
-echo "XDG_SESSION_TYPE set to Wayland in ~/.profile, This will be effective from the next login or if you source it"
+    if ! grep -Fq "$string_to_append" "$target_file"; then
+        echo "$string_to_append" >> "$target_file"
+        echo "Appended to $target_file: $string_to_append"
+    else
+        echo "Already in $target_file: $string_to_append"
+    fi
+}
+# Define the path to the .profile file
+PROFILE_FILE="$HOME/.profile"
+EXPORT="XDG_SESSION_TYPE=wayland"
+append_if_not_exists "$EXPORT" "$PROFILE_FILE"
 echo "Finished, you should be able to use 'river' command, if not, reboot"
+# General function to append a string to a file if it does not exist
