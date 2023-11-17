@@ -1,0 +1,13 @@
+* {
+    foreground:           rgba(255, 255, 255, 100%);
+    selected-foreground:  rgba(0, 0, 0, 100%);
+    
+    background:           #000000;
+    background-solid:     #000000;
+    selected-background:  #ffffff; /*#f9b578; *rgba(0, 0, 0, 40%);*/
+    separatorcolor:       #000000;
+
+    red:                  rgba ( 220, 50, 47, 100 % );
+    blue:                 rgba ( 38, 139, 210, 100 % );
+}
+

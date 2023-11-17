@@ -58,7 +58,7 @@ riverctl map normal Super Z spawn chromium
 #	Screenshot
 riverctl map normal None Print spawn "grimshot copy area"
 #	Launcher
-riverctl map normal Super Tab spawn "tofi-drun --drun-launch=true --font /usr/share/fonts/NerdFonts/ttf/HackNerdFont-Regular.ttf"
+riverctl map normal Super Tab spawn "rofi -show drun"
 #	Launcher-Mode
 riverctl declare-mode launcher
 riverctl map normal Super Grave enter-mode launcher

@@ -53,7 +53,7 @@
 /* river mode */
 #mode {
     margin: 5px 10px;
-    color: @text;
+    color: @mode-nonstandard;
 
     padding-right: 10px;
     border-right: dashed 2px @border;
