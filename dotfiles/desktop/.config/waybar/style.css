@@ -3,7 +3,7 @@
  * -------------------------------------------------------------------------- */
 
 /* Define custom colors */
-@define-color background #000000;
+@define-color background #000000;         
 @define-color border #ffffff;
 @define-color text #ffffff;
 @define-color bad #ed1405;
@@ -52,9 +52,7 @@
 
 /* river mode */
 #mode {
-    margin-left: 5px;
-    margin-top: 5px;
-    margin-bottom: 5px;
+    margin: 5px 10px;
     color: @text;
 
     padding-right: 10px;
@@ -104,6 +102,10 @@
     color: @tag-focused;
     /*box-shadow: inset 0 -2px #ff9b05,inset 0 2px #ff9b05;*/
 }
+/* River window */
+#window{
+    padding: 0px 10px;
+}
 /* Volume */
 #pulseaudio {
     margin: 5px 10px;
@@ -138,6 +140,10 @@
 #network {
     margin: 5px 10px;
     color: @net;
+
+    padding-right: 10px;
+    border-right: dashed 2px @border;
+    margin-right: 0px;
 }
 #network.disconnected{
     margin: 5px 10px;
@@ -145,10 +151,11 @@
 }
 /* Tray */
 #tray{
-    border-left: dashed 2px @border;
-    padding-left: 5px;
-    margin-right: 5px;
-    margin-left: 10px;
-    margin-top: 5px;
-    margin-bottom: 5px;
+    padding-right: 10px;
+    border-right: dashed 2px @border;
+    margin-right: 0px;
+}
+/* Calendar */
+#clock{
+    margin: 5px 10px;
 }

@@ -16,7 +16,8 @@
         "pulseaudio",
         "temperature",
         "network",
-        "tray"
+        "tray",
+        "clock"
         ],
 
     // -------------------------------------------------------------------------
@@ -27,12 +28,38 @@
             "format": "mode: {}",
         },
 
+        "cpu": {
+            "interval": 3,
+            "format": "Cpu: {usage}%"
+        },
+
+        "memory": {
+            "interval": 3,
+            "format": "Mem: {}%",
+        },
+
         "river/tags": {
             "num-tags": 9,
         },
 
         "river/window": {
             "format": "{}",
+            "tooltip": "false",
+            "max-length": 200,
+        },
+
+        "pulseaudio": {
+            "on-click": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
+            "format": "Vol: {volume}%",
+            "format-muted": "Vol: muted",
+            "on-click-right"  : "pavucontrol"
+        },
+
+        "temperature": {
+            "interval": 3,
+            "hwmon-path": "/sys/class/hwmon/hwmon3/temp1_input",
+            "critical-threshold": 80,
+            "format": "Temp {temperatureC}°C",
         },
 
         "network": {
@@ -45,33 +72,14 @@
             "format-alt": "{ifname}: {ipaddr}/{cidr}"
         },
 
-        "pulseaudio": {
-            "on-click": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
-            "format": "Vol: {volume}%",
-            "format-muted": "Vol: muted",
-            "on-click-right"  : "pavucontrol"
-        },
-
-        "memory": {
-            "interval": 3,
-            "format": "Mem: {}%",
-        },
-
         "tray": {
             "icon-size": 20,
             "reverse-direction": true,
             "spacing": 5
         },
 
-        "cpu": {
-            "interval": 3,
-            "format": "Cpu: {usage}%"
-        },
-
-        "temperature": {
-            "interval": 3,
-            "hwmon-path": "/sys/class/hwmon/hwmon3/temp1_input",
-            "critical-threshold": 80,
-            "format": "Temp {temperatureC}°C",
-        },
+        "clock": {
+            "format": "{:%H:%M}",
+            "format-alt": "{:%A, %B %d, %Y (%R)}",
+        }
 }
