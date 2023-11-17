@@ -1,9 +1,4 @@
 #!/bin/bash
-# Ensure script is run as a normal user and not root
-if [ "$(id -u)" -eq 0 ]; then
-    echo "This script should not be run as root. Please run as a normal user."
-    exit 1
-fi
 # Install necessary dependencies for building packages
 echo "Installing necessary base-devel group and git..."
 sudo pacman -S --noconfirm --needed base-devel git
@@ -29,7 +24,7 @@ cd ..
 echo "paru installation complete."
 
 echo "Configuring paru"
-echo "Do you want to enable color in pacman and paru? (yes/no)"
+echo "Do you want to enable color in pacman and paru? (recommended) (yes/no)"
 read answer
 
 # Convert the answer to lowercase to simplify matching
@@ -57,7 +52,7 @@ else
     # Inform the user if the response is not recognized
     echo "Invalid response. Interpreting as 'no'"
 fi
-echo "Do you want to enable parallel downloading in pacman and paru? (yes/no)"
+echo "Do you want to enable parallel downloading in pacman and paru? (recommended) (yes/no)"
 read answer
 # Check the user's answer
 if [ "$answer" = "yes" ] || [ "$answer" = "y" ]; then

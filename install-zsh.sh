@@ -1,23 +1,51 @@
 #!/bin/bash
 paru -S --noconfirm zsh
-echo "Installing oh-my-zsh"
-sh -c "$(wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)"
-echo "Installing powerlevel10k"
-mkdir -p installed-packages
-cd installed-packages
-git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
 
-# Define the path to the .zshrc file
-ZSHRC_FILE="$HOME/.zshrc"
+echo "Do you want set zsh as the default shell for $(whoami)? (recommended) (yes/no)"
+read answer
 
-# Define the new theme string
-NEW_THEME="powerlevel10k/powerlevel10k"
+# Convert the answer to lowercase to simplify matching
+answer=$(echo "$answer" | tr '[:upper:]' '[:lower:]')
 
-# Backup the existing .zshrc file
-cp "$ZSHRC_FILE" "$ZSHRC_FILE.backup"
+# Check the user's answer
+if [ "$answer" = "yes" ] || [ "$answer" = "y" ]; then
+    # Code to execute if user answers yes
+    echo "Setting Zsh as the default shell for user"
+    ZSH_SHELL=$(which zsh)
+    if chsh -s "$ZSH_SHELL"; then
+        echo "Successfully changed the default shell to zsh."
+        echo "Effect will take place after next login"
+    else
+        echo "Failed to change the default shell to zsh."
+        exit 1
+    fi
 
-# Use sed to find the ZSH_THEME= line and replace its value
-sed -i "/^ZSH_THEME=/c\ZSH_THEME=\"$NEW_THEME\"" "$ZSHRC_FILE"
+elif [ "$answer" = "no" ] || [ "$answer" = "n" ]; then
+    # Code to execute if user answers no
+    echo "You chose not to proceed."
 
-echo "ZSH_THEME has been updated to $NEW_THEME in $ZSHRC_FILE."
+else
+    # Inform the user if the response is not recognized
+    echo "Invalid response. Interpreting as 'no'"
+fi
 
+echo "Do you want to install oh-my-zsh? (recommended) (yes/no)"
+read answer
+
+# Convert the answer to lowercase to simplify matching
+answer=$(echo "$answer" | tr '[:upper:]' '[:lower:]')
+
+# Check the user's answer
+if [ "$answer" = "yes" ] || [ "$answer" = "y" ]; then
+    # Code to execute if user answers yes
+    echo "Installing oh-my-zsh"
+    sh -c "$(wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)"
+
+elif [ "$answer" = "no" ] || [ "$answer" = "n" ]; then
+    # Code to execute if user answers no
+    echo "You chose not to proceed."
+
+else
+    # Inform the user if the response is not recognized
+    echo "Invalid response. Interpreting as 'no'"
+fi

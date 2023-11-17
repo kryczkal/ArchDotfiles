@@ -12,16 +12,6 @@ read answer
 
 # Convert the answer to lowercase to simplify matching
 answer=$(echo "$answer" | tr '[:upper:]' '[:lower:]')
-# Define the aliases to check and append
-ALIAS1="alias -g -- -h='-h 2>&1 | bat --language=help --style=plain'"
-ALIAS2="alias -g -- --help='--help 2>&1 | bat --language=help --style=plain'"
-# Define the exports to check and append
-EXPORT1='export MANPAGER="sh -c '\''col -bx | bat -l man -p'\''"'
-EXPORT2='export MANROFFOPT="-c"'
-# Define the path to the .zshrc file
-ZSHRC_FILE="$HOME/.zshrc"
-# Define the path to the .profile file
-PROFILE_FILE="$HOME/.profile"
 
 # General function to append a string to a file if it does not exist
 append_if_not_exists() {
@@ -38,13 +28,27 @@ append_if_not_exists() {
 
 # Check the user's answer
 if [ "$answer" = "yes" ] || [ "$answer" = "y" ]; then
+    # Define the aliases to check and append
+    ALIAS1="alias -g -- -h='-h 2>&1 | bat --language=help --style=plain'"
+    ALIAS2="alias -g -- --help='--help 2>&1 | bat --language=help --style=plain'"
+    # Define the exports to check and append
+    EXPORT1='export MANPAGER="sh -c '\''col -bx | bat -l man -p'\''"'
+    EXPORT2='export MANROFFOPT="-c"'
+    # Define the path to the .zshrc file
+    ZSHRC_FILE="$HOME/.zshrc"
+    # Define the path to the .profile and .zprofile files
+    PROFILE_FILE="$HOME/.profile"
+    ZPROFILE_FILE="$HOME/.zprofile"
     # Code to execute if user answers yes
     # Check and append the aliases
     append_if_not_exists "$ALIAS1" "$ZSHRC_FILE"
     append_if_not_exists "$ALIAS2" "$ZSHRC_FILE"
-    # Check and append the exports
+    # Check and append the exports to .profile
     append_if_not_exists "$EXPORT1" "$PROFILE_FILE"
     append_if_not_exists "$EXPORT2" "$PROFILE_FILE"
+    # Check and append the exports to .zprofile
+    append_if_not_exists "$EXPORT1" "$ZPROFILE_FILE"
+    append_if_not_exists "$EXPORT2" "$ZPROFILE_FILE"
     echo "$PROFILE_FILE and $ZSHRC_FILE have been updated."
     echo "Changes will take place after reboot or manual sourcing of $PROFILE_FILE"
 
