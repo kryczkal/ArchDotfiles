@@ -151,6 +151,7 @@
 }
 /* Tray */
 #tray{
+    margin: 5px 10px;
     padding-right: 10px;
     border-right: dashed 2px @border;
     margin-right: 0px;
