@@ -37,6 +37,7 @@ answer=$(echo "$answer" | tr '[:upper:]' '[:lower:]')
 
 # Check the user's answer
 if [ "$answer" = "yes" ] || [ "$answer" = "y" ]; then
+    paru -S --noconfirm wget
     # Code to execute if user answers yes
     echo "Installing oh-my-zsh"
     sh -c "$(wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)"

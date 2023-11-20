@@ -7,3 +7,4 @@ echo "Press any key to continue"
 read -n 1 -s -r
 sudo mkdir -p /etc/lemurs/wayland
 sudo cp river-lemurs-entry/river /etc/lemurs/wayland/
+sudo chmod _x /etc/lemurs/wayland/river

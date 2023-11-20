@@ -16,6 +16,7 @@
         "pulseaudio",
         "temperature",
         "network",
+        "battery"
         "tray",
         "clock"
         ],
@@ -71,6 +72,14 @@
             "format-disconnected": "Disconnected ⚠",
             "format-alt": "{ifname}: {ipaddr}/{cidr}"
         },
+
+        "battery": {
+            "states": {
+                "warning": 30,
+                "critical": 15,
+            },
+            "format": "{capacity}%"
+        }
 
         "tray": {
             "icon-size": 20,
