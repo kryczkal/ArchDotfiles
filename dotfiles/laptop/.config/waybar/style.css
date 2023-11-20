@@ -16,6 +16,8 @@
 @define-color vol #b600e3;
 @define-color temp #4bff33;
 @define-color net #05b8ff;
+@define-color bat #4bff33;
+@define-color lit #b600e3;
 
 /* Reset all styles */
 * {
@@ -148,6 +150,24 @@
 #network.disconnected{
     margin: 5px 10px;
     color: @bad;
+}
+/* Backlight */
+#backlight {
+    margin: 5px 10px;
+    color: @lit;
+
+    padding-right: 10px;
+    border-right: dashed 2px @border;
+    margin-right: 0px;
+}
+/* Battery */
+#battery {
+    margin: 5px 10px;
+    color: @bat;
+
+    padding-right: 10px;
+    border-right: dashed 2px @border;
+    margin-right: 0px;
 }
 /* Tray */
 #tray{

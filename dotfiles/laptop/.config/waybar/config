@@ -16,7 +16,8 @@
         "pulseaudio",
         "temperature",
         "network",
-        "battery"
+        "backlight",
+        "battery",
         "tray",
         "clock"
         ],
@@ -65,12 +66,16 @@
 
         "network": {
             "interval" : 3,
-            "format-wifi": "Net: {essid} Down: {bandwidthDownBytes} Up: {bandwidthUpBytes}",
-            "format-ethernet": "Net: Down: {bandwidthDownBytes} Up: {bandwidthUpBytes}",
+            "format-wifi": "D: {bandwidthDownBytes} U: {bandwidthUpBytes}",
+            "format-ethernet": "D: {bandwidthDownBytes} U: {bandwidthUpBytes}",
             "tooltip-format": "{ifname} via {gwaddr}",
             "format-linked": "{ifname} (No IP)",
             "format-disconnected": "Disconnected ⚠",
             "format-alt": "{ifname}: {ipaddr}/{cidr}"
+        },
+
+        "backlight": {
+            "format": "Lit: {percent}%",
         },
 
         "battery": {
@@ -78,13 +83,13 @@
                 "warning": 30,
                 "critical": 15,
             },
-            "format": "{capacity}%"
-        }
+            "format": "Bat: {capacity}%"
+        },
 
         "tray": {
             "icon-size": 20,
             "reverse-direction": true,
-            "spacing": 5
+            "spacing": 5,
         },
 
         "clock": {
