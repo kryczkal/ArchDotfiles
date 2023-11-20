@@ -1,7 +1,7 @@
 configuration {
     modi: "window,run,drun";
     show-icons: true;
-    font: "MesloLG Nerd Font 15";
+    font: "MesloLGM Nerd Font 15";
 }
 
 @import "colors.rasi"
