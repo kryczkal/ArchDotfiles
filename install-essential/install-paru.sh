@@ -4,8 +4,8 @@ echo "Installing necessary base-devel group and git and cargo..."
 sudo pacman -S --noconfirm --needed base-devel git cargo
 
 # Create a directory for packages if it doesn't exist
-mkdir -p installed-packages
-cd installed-packages
+mkdir -p temporary-files
+cd temporary-files
 
 # Clone the paru PKGBUILD from the AUR
 echo "Cloning paru from AUR..."
