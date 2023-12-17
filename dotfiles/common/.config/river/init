@@ -2,6 +2,7 @@
 
 kanshi &
 waybar &
+mako --width 1000 --height 300 --border-size 2 --border-color=#ffffff --background-color=#000000 --text-color=#ffffff --font='MesloLGM 10'&
 # riverctl declare-mode launcher
 # riverctl map normal Mod4 d enter-mode launcher
 # riverctl map launcher None f spawn firefox
@@ -55,7 +56,6 @@ riverctl float-filter-add app-id float
 # Starting Apps
 # 	Terminal
 riverctl map normal Super Return spawn alacritty
-riverctl map normal Super Z spawn chromium
 #	Screenshot
 riverctl map normal None Print spawn "grimshot copy area"
 #	Launcher
@@ -98,7 +98,7 @@ riverctl keyboard-layout pl
 riverctl attach-mode bottom
 #    Cursor Settings
 riverctl set-cursor-warp on-focus-change
-riverctl focus-follows-cursor always
+riverctl focus-follows-cursor default
 riverctl hide-cursor when-typing enabled
 
 # Start Layout
