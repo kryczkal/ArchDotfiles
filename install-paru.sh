@@ -1,7 +1,7 @@
 #!/bin/bash
 # Install necessary dependencies for building packages
-echo "Installing necessary base-devel group and git..."
-sudo pacman -S --noconfirm --needed base-devel git
+echo "Installing necessary base-devel group and git and cargo..."
+sudo pacman -S --noconfirm --needed base-devel git cargo
 
 # Create a directory for packages if it doesn't exist
 mkdir -p installed-packages

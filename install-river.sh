@@ -3,6 +3,7 @@ sudo pacman -S river wayland wlroots wayland-protocols
 while true; do
     # Ask the user a yes/no question
     echo "Do you want to install my config along with all my river tools? (yes/no)"
+    # TODO: this option in unnecesarry and misleading
     read answer
 
     # Convert the answer to lowercase to simplify matching

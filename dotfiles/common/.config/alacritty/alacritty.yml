@@ -123,48 +123,29 @@
 
 # Font configuration
 font:
-  # Normal (roman) font face
+  # The normal (roman) font face to use.
   normal:
-    # Font family
-    family: "MesloLGS Nerd Font"
+    family: MesloLGSDZ Nerd Font Mono
+    style: Regular
 
-  # Bold font face
-  bold:
-    # Font family
-    family: "MesloLGS Nerd Font Bold"
-
-  # Italic font face
-  italic:
-    # Font family
-    family: "MesloLGS Nerd Fontv Italic"
-
-  # Bold italic font face
-  bold_italic:
-    # Font family
-    family: "MesloLGS Nerd Font Bold Italic" 
-
+  # The font size to use.
   size: 15.0
 
-  # Offset is the extra space around each character. `offset.y` can be thought
-  # of as modifying the line spacing, and `offset.x` as modifying the letter
-  # spacing.
-  #offset:
-  #  x: 0
-  #  y: 0
+  # The offset is used to adjust the default line spacing, this setting is a
+  # multiplier of the cell height, not a number of pixels.
+  offset:
+    x: 0
+    y: 0
 
   # Glyph offset determines the locations of the glyphs within their cells with
-  # the default being at the bottom. Increasing `x` moves the glyph to the
-  # right, increasing `y` moves the glyph upward.
-  #glyph_offset:
-  #  x: 0
-  #  y: 0
+  # the default being at the bottom. Increasing `x` moves the glyph to the right,
+  # increasing `y` moves the glyph upwards.
+  glyph_offset:
+    x: 0
+    y: 0
 
-  # Use built-in font for box drawing characters.
-  #
-  # If `true`, Alacritty will use a custom built-in font for box drawing
-  # characters (Unicode points 2500 - 259f).
-  #
-  #builtin_box_drawing: true
+  # For monospaced text like coding, use MesloLGSDZ Nerd Font Mono
+  # This can be specified as part of the `normal` section if you use it as the default.
 
 # If `true`, bold text is drawn using the bright color variants.
 draw_bold_text_with_bright_colors: false
