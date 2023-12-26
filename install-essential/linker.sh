@@ -1,6 +1,6 @@
 #!/bin/bash
 # Execute stow from inside the dotfiles directory
-cd dotfiles
+cd ../dotfiles
 stow -t "$HOME" common
 
 echo "Is your device a laptop (has battery/screen brightness) (yes/no)"
