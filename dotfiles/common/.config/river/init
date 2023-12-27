@@ -59,7 +59,7 @@ riverctl map normal Super Return spawn alacritty
 #	Screenshot
 riverctl map normal None Print spawn "grimshot copy area"
 #	Launcher
-riverctl map normal Super Tab spawn "rofi -show drun"
+riverctl map normal Super Tab spawn "rofi -show drun > /dev/null 2>&1"
 #	Launcher-Mode
 riverctl declare-mode launcher
 riverctl map normal Super Grave enter-mode launcher
