@@ -6,7 +6,8 @@ kanshi &
 killall waybar && waybar &
 init_task_roller &
 waybar &
-mako --width 1000 --height 300 --border-size 2 --border-color=#ffffff --background-color=#000000 --text-color=#ffffff --font='MesloLGM 10'&
+mako --width 1000 --height 300 --border-size 2 --border-color=#ffffff \
+ --background-color=#000000 --text-color=#ffffff --font='MesloLGM 10'&
 ################################################################################
 #                             Bash Variables Init                              #
 ################################################################################
