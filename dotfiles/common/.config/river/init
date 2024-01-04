@@ -5,6 +5,8 @@
 kanshi &
 killall waybar && waybar &
 init_task_roller &
+waybar &
+mako --width 1000 --height 300 --border-size 2 --border-color=#ffffff --background-color=#000000 --text-color=#ffffff --font='MesloLGM 10'&
 ################################################################################
 #                             Bash Variables Init                              #
 ################################################################################
@@ -17,6 +19,12 @@ declare -a modes=("$normal" "$multi_monitor")
 #------------------------------------------------------------------------------#
 #                          Normal Mode : Declaration                           #
 #------------------------------------------------------------------------------#
+# riverctl declare-mode launcher
+# riverctl map normal Mod4 d enter-mode launcher
+# riverctl map launcher None f spawn firefox
+# riverctl map launcher None Escape enter-mode normal
+
+# Normal Mode
 # 	Exit River
 riverctl map normal Super Escape exit
 #	Kill Focused Window
@@ -158,7 +166,7 @@ riverctl float-filter-add app-id float
 #                                    Cursor                                    #
 ################################################################################
 riverctl set-cursor-warp on-focus-change
-riverctl focus-follows-cursor always
+riverctl focus-follows-cursor default
 riverctl hide-cursor when-typing enabled
 ################################################################################
 #                                 Init layout                                  #
