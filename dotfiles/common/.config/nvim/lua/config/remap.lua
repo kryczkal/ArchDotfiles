@@ -18,3 +18,11 @@ end)
 -- undotree
 vim.keymap.set("n", "<leader>u", vim.cmd.UndotreeToggle)
 
+vim.keymap.set('n', '<leader>bt', function()
+    require('utils.bash_title').GenerateBashTitle(vim.fn.input('Enter title: '))
+end, {})
+vim.keymap.set('n', '<leader>bst', function()
+    local subtitle = vim.fn.input('Enter subtitle: ')
+    require('utils.bash_title').GenerateBashSubtitle(subtitle)
+end, { noremap = true, silent = true })
+

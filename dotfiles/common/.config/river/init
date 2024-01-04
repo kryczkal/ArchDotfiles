@@ -1,75 +1,120 @@
 #!/bin/sh
-
+################################################################################
+#                                 Startup Apps                                 #
+################################################################################
 kanshi &
-waybar &
-# riverctl declare-mode launcher
-# riverctl map normal Mod4 d enter-mode launcher
-# riverctl map launcher None f spawn firefox
-# riverctl map launcher None Escape enter-mode normal
-
-# Normal Mode
+killall waybar && waybar &
+init_task_roller &
+################################################################################
+#                             Bash Variables Init                              #
+################################################################################
+normal="normal"
+multi_monitor="multi-monitor"
+declare -a modes=("$normal" "$multi_monitor")
+################################################################################
+#                                 Normal Mode                                  #
+################################################################################
+#------------------------------------------------------------------------------#
+#                          Normal Mode : Declaration                           #
+#------------------------------------------------------------------------------#
 # 	Exit River
 riverctl map normal Super Escape exit
 #	Kill Focused Window
 riverctl map normal Super Q close
-#	Change Focus
-#        Single Monitor
+#------------------------------------------------------------------------------#
+#                             Normal Mode : Focus                              #
+#------------------------------------------------------------------------------#
 riverctl map normal Super Left focus-view previous
 riverctl map normal Super Right focus-view next
-#        Multi Monitor
-riverctl map normal Super+Control Left focus-output left
-riverctl map normal Super+Control Down focus-output down
-riverctl map normal Super+Control Right focus-output right
-riverctl map normal Super+Control Up focus-output up
-#	Move Windows Around
-#	    Single Monitor
+#------------------------------------------------------------------------------#
+#                          Normal Mode : Move Windows                          #
+#------------------------------------------------------------------------------#
 riverctl map normal Super+Shift Left swap previous
 riverctl map normal Super+Shift Right swap next
-#        Multi Monitor
-riverctl map normal Super+Shift+Control Left spawn "riverctl send-to-output left && riverctl focus-output left"
-riverctl map normal Super+Shift+Control Down spawn "riverctl send-to-output down && riverctl focus-output down"
-riverctl map normal Super+Shift+Control Right spawn "riverctl send-to-output right && riverctl focus-output right"
-riverctl map normal Super+Shift+Control Up spawn "riverctl send-to-output up && riverctl focus-output up"
-#	Fullscreen Window
+#------------------------------------------------------------------------------#
+#                       Normal Mode : Fullscreen Toggle                        #
+#------------------------------------------------------------------------------#
 riverctl map normal Super F toggle-fullscreen
-
-#	Layout Specific
-#		Resize Main Window
+#------------------------------------------------------------------------------#
+#                         Normal Mode : Window Ratios                          #
+#------------------------------------------------------------------------------#
+#	Resize Main Window
 riverctl map normal Super Down send-layout-cmd rivertile "main-ratio -0.05"
 riverctl map normal Super Up send-layout-cmd rivertile "main-ratio +0.05"
-#		Change Number of Windows in Main
+#	Change Number Of Windows In Main Segment
 riverctl map normal Super+Shift Down send-layout-cmd rivertile "main-count -1"
 riverctl map normal Super+Shift Up send-layout-cmd rivertile "main-count +1"
-
-# 	Floating Windows
-# 		Toggle Float
-riverctl map normal Super Space toggle-float
-#		Mouse Resize + Move
-riverctl map-pointer normal Super BTN_LEFT move-view
-riverctl map-pointer normal Super BTN_RIGHT resize-view
-#		Middle Mouse Toggle Float
-riverctl map-pointer normal Super BTN_MIDDLE toggle-float
-#		Automatic float
-riverctl float-filter-add app-id float
-
-# Starting Apps
-# 	Terminal
-riverctl map normal Super Return spawn alacritty
-riverctl map normal Super Z spawn chromium
-#	Screenshot
-riverctl map normal None Print spawn "grimshot copy area"
-#	Launcher
-riverctl map normal Super Tab spawn "rofi -show drun"
-#	Launcher-Mode
-riverctl declare-mode launcher
-riverctl map normal Super Grave enter-mode launcher
-#		Launcher-Apps
-riverctl map launcher Super C spawn "riverctl enter-mode normal && chromium"
-riverctl map launcher Super V spawn "riverctl enter-mode normal && code"
-#	Launcher-Exit
-riverctl map launcher Super Escape enter-mode normal
-
-# Tags
+################################################################################
+#                              Multi Monitor Mode                              #
+################################################################################
+#------------------------------------------------------------------------------#
+#                       Multi Monitor : Mode Declaration                       #
+#------------------------------------------------------------------------------#
+riverctl declare-mode multi-monitor
+#   Enter Mode
+riverctl map normal Super Grave enter-mode multi-monitor
+#   Exit Mode
+riverctl map multi-monitor Super Escape enter-mode normal
+riverctl map multi-monitor Super Grave enter-mode normal
+#------------------------------------------------------------------------------#
+#                            Multi Monitor : Focus                             #
+#------------------------------------------------------------------------------#
+riverctl map multi-monitor Super Left spawn \
+    "riverctl focus-output left"
+riverctl map multi-monitor Super Down spawn \
+    "riverctl focus-output down"
+riverctl map multi-monitor Super Right spawn \
+    "riverctl focus-output right"
+riverctl map multi-monitor Super Up spawn \
+    "riverctl focus-output up"
+#------------------------------------------------------------------------------#
+#                         Multi Monitor : Move Windows                         #
+#------------------------------------------------------------------------------#
+riverctl map multi-monitor Super+Shift Left spawn \
+    "riverctl send-to-output left && \
+    riverctl focus-output left"
+riverctl map multi-monitor Super+Shift Down spawn \
+    "riverctl send-to-output down && \
+    riverctl focus-output down"
+riverctl map multi-monitor Super+Shift Right spawn \
+    "riverctl send-to-output right && \
+    riverctl focus-output right"
+riverctl map multi-monitor Super+Shift Up spawn \
+    "riverctl send-to-output up && \
+    riverctl focus-output up"
+################################################################################
+#                         Bindings Shared Across Modes                         #
+################################################################################
+for mode in "${modes[@]}"; do
+echo "$mode"
+#------------------------------------------------------------------------------#
+#                                 Toggle Float                                 #
+#------------------------------------------------------------------------------#
+riverctl map "$mode" Super Space toggle-float
+#------------------------------------------------------------------------------#
+#                           Mouse Resize + Movement                            #
+#------------------------------------------------------------------------------#
+riverctl map-pointer "$mode" Super BTN_LEFT move-view
+riverctl map-pointer "$mode" Super BTN_RIGHT resize-view
+################################################################################
+#                              App Start Bindings                              #
+################################################################################
+#------------------------------------------------------------------------------#
+#                                   Terminal                                   #
+#------------------------------------------------------------------------------#
+riverctl map "$mode" Super Return spawn alacritty
+#------------------------------------------------------------------------------#
+#                                  Screenshot                                  #
+#------------------------------------------------------------------------------#
+riverctl map "$mode" None Print spawn "grimshot copy area"
+#------------------------------------------------------------------------------#
+#                                   Launcher                                   #
+#------------------------------------------------------------------------------#
+riverctl map "$mode" Super Tab spawn "rofi -show drun"
+done
+################################################################################
+#                                     Tags                                     #
+################################################################################
 for i in $(seq 1 9)
 do
 	tags=$((1 << ($i -1)))
@@ -78,31 +123,51 @@ do
 	riverctl map normal Super+Control $i toggle-focused-tags $tags
 	riverctl map normal Super+Shift+Control $i toggle-view-tags $tags
 done
-
-
-# Appearance
+################################################################################
+#                                  Appearance                                  #
+################################################################################
 riverctl background-color 0x000000 # Black
 riverctl border-color-focused 0xFFFFFF # White
 riverctl border-color-unfocused 0xAAAAAA # Gray
 riverctl border-width 0 # maybe 1
-
-
-# Misc
-# 	Keyboard Repeat Rate
+################################################################################
+#                                     Misc                                     #
+################################################################################
+#------------------------------------------------------------------------------#
+#                             Keyboard Repeat Rate                             #
+#------------------------------------------------------------------------------#
 riverctl map normal Super W spawn "./waybar_toggle"
-riverctl set-repeat 25 150
-#	Bar Use Decorations
-# riverctl rule-add csd -app-id 'bar' # doesnt work?
-#	Set polish keyboard layout
+riverctl set-repeat 25 250
+#------------------------------------------------------------------------------#
+#                     Flameshot Compatibility Requirement                      #
+#------------------------------------------------------------------------------#
+riverctl float-filter-add "flameshot"
+#------------------------------------------------------------------------------#
+#                             Set Polish Keyboard                              #
+#------------------------------------------------------------------------------#
 riverctl keyboard-layout pl
+#------------------------------------------------------------------------------#
+#                             New Window Add Order                             #
+#------------------------------------------------------------------------------#
 riverctl attach-mode bottom
-#    Cursor Settings
+#------------------------------------------------------------------------------#
+#                            Automatic Float Filter                            #
+#------------------------------------------------------------------------------#
+riverctl float-filter-add app-id float
+################################################################################
+#                                    Cursor                                    #
+################################################################################
 riverctl set-cursor-warp on-focus-change
 riverctl focus-follows-cursor always
 riverctl hide-cursor when-typing enabled
-
-# Start Layout
-#	Spawn Layout
+################################################################################
+#                                 Init layout                                  #
+################################################################################
+#------------------------------------------------------------------------------#
+#                                 Spawn Layout                                 #
+#------------------------------------------------------------------------------#
 riverctl default-layout rivertile
-riverctl float-filter-add "flameshot"
+#------------------------------------------------------------------------------#
+#                                   Set Gaps                                   #
+#------------------------------------------------------------------------------#
 rivertile -view-padding 0 -outer-padding 0
