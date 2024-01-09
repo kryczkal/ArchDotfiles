@@ -1,0 +1,41 @@
+[colors]
+draw_bold_text_with_bright_colors = false
+
+[colors.bright]
+black = "#767676"
+blue = "#1A8FFF"
+cyan = "#14FFFF"
+green = "#23FD00"
+magenta = "#FD28FF"
+red = "#F2201F"
+white = "#FFFFFF"
+yellow = "#FFFD00"
+
+[colors.normal]
+black = "#000000"
+blue = "#0D73CC"
+cyan = "#0DCDCD"
+green = "#19CB00"
+magenta = "#CB1ED1"
+red = "#CC0403"
+white = "#DDDDDD"
+yellow = "#CECB00"
+
+[colors.primary]
+background = "#000000"
+foreground = "#FFFFFF"
+
+[font]
+size = 15.0
+
+[font.glyph_offset]
+x = 0
+y = 0
+
+[font.normal]
+family = "MesloLGSDZ Nerd Font Mono"
+style = "Regular"
+
+[font.offset]
+x = 0
+y = 0
