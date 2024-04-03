@@ -23,11 +23,6 @@
     // -------------------------------------------------------------------------
     // Modules
     // -------------------------------------------------------------------------
-
-        "river/mode": {
-            "format": "mode: {}",
-        },
-
         "cpu": {
             "interval": 3,
             "format": "Cpu: {usage}%"
@@ -42,10 +37,9 @@
             "num-tags": 9,
         },
 
-        "river/window": {
-            "format": "{}",
-            "tooltip": "false",
-            "max-length": 200,
+        "wlr/workspaces": {
+            "format": "mode: {}",
+            "sort-by-number": true
         },
 
         "pulseaudio": {
