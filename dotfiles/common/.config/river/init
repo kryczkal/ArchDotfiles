@@ -2,7 +2,7 @@
 ################################################################################
 #                                 Startup Apps                                 #
 ################################################################################
-kanshi &
+# kanshi &
 killall waybar && waybar &
 init_task_roller &
 waybar &
@@ -112,6 +112,7 @@ riverctl map-pointer "$mode" Super BTN_RIGHT resize-view
 #                                   Terminal                                   #
 #------------------------------------------------------------------------------#
 riverctl map "$mode" Super Return spawn alacritty
+riverctl map "$mode" Super+Shift Return spawn "alacritty --class float_app"
 #------------------------------------------------------------------------------#
 #                                  Screenshot                                  #
 #------------------------------------------------------------------------------#
@@ -120,6 +121,13 @@ riverctl map "$mode" None Print spawn "grimshot copy area"
 #                                   Launcher                                   #
 #------------------------------------------------------------------------------#
 riverctl map "$mode" Super Tab spawn "rofi -show drun"
+################################################################################
+#                                                                              #
+################################################################################
+#------------------------------------------------------------------------------#
+#                                 File MAnager                                 #
+#------------------------------------------------------------------------------#
+riverctl map "$mode" Super E spawn "nautilus"
 done
 ################################################################################
 #                                     Tags                                     #
@@ -138,7 +146,7 @@ done
 riverctl background-color 0x000000 # Black
 riverctl border-color-focused 0xFFFFFF # White
 riverctl border-color-unfocused 0xAAAAAA # Gray
-riverctl border-width 0 # maybe 1
+riverctl border-width 1 # maybe 1
 ################################################################################
 #                                     Misc                                     #
 ################################################################################
@@ -163,6 +171,9 @@ riverctl attach-mode bottom
 #                            Automatic Float Filter                            #
 #------------------------------------------------------------------------------#
 riverctl float-filter-add app-id float
+riverctl float-filter-add app-id float_app
+riverctl float-filter-add title float_app
+riverctl float-filter-add title float_app
 ################################################################################
 #                                    Cursor                                    #
 ################################################################################

@@ -1,0 +1,146 @@
+/* -----------------------------------------------------------------------------
+ * Base styles
+ * -------------------------------------------------------------------------- */
+
+/* Define custom colors */
+@define-color background #000000;         
+@define-color border #ffffff;
+@define-color text #ffffff;
+@define-color bad #ed1405;
+@define-color mode-nonstandard #4bff33;
+@define-color cpu #ff9b05;
+@define-color mem #ff9b05;
+@define-color tag-focused #ff9b05;
+@define-color tag-occupied #ffffff;
+@define-color tag-notoccupied #4bff33;
+@define-color vol #b600e3;
+@define-color temp #4bff33;
+@define-color net #05b8ff;
+
+/* Reset all styles */
+* {
+    border: none;
+    border-radius: 0;
+    min-height: 0;
+    margin: 0;
+    padding: 0;
+}
+/* The whole bar */
+#waybar {
+    border-bottom: 2px dashed @border;
+    border-top: 2px dashed @border;
+    background: @background;
+    color: @text;
+    font-family: MesloLGM Nerd Font;
+    font-size: 17px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+/* Each module */
+/*#mode,*/
+#cpu,
+#memory,
+/*#tags,*/
+/*river/window*/
+#temperature,
+#network
+#tray
+
+/* -----------------------------------------------------------------------------
+ * Module styles
+ * -------------------------------------------------------------------------- */
+
+/* Cpu*/
+#cpu {
+    margin: 5px 10px;
+    margin-right: 0px;
+    color: @cpu;
+
+    padding-right: 10px;
+    border-right: dashed 2px @border;
+    margin-right: 0px;
+}
+/* Memory */
+#memory {
+    margin: 5px 10px;
+    color: @mem;
+
+    padding-right: 10px;
+    border-right: dashed 2px @border;
+    margin-right: 0px;
+}
+/* Qtile Wlr Workspaces */
+#workspaces {
+    padding-right: 10px;
+    border-right: dashed 2px @border;
+    margin-right: 0px;
+}
+#workspaces button {
+    /* Use box-shadow instead of border so the text isn't offset */
+    box-shadow: inset 0 -3px transparent;
+    /* Avoid rounded borders under each button name */
+    border: none;
+    border-radius: 0;
+    margin: 0 2px;
+}
+#workspaces button.persistent {
+    color: @tag-occupied;
+}
+#workspaces button.visible {
+    color: @tag-focused;
+    /*box-shadow: inset 0 -2px #ff9b05,inset 0 2px #ff9b05;*/
+}
+/* Volume */
+#pulseaudio {
+    margin: 5px 10px;
+    color: @vol;
+
+    padding-right: 10px;
+    border-right: dashed 2px @border;
+    margin-right: 0px;
+
+    padding-left: 10px;
+    border-left: dashed 2px @border;
+    margin-left: 0px;
+}
+#pulseaudio.muted {
+    margin: 5px 10px;
+    color: @bad;
+}
+/* Temperature */
+#temperature {
+    margin: 5px 10px;
+    color: @temp;
+
+    padding-right: 10px;
+    border-right: dashed 2px @border;
+    margin-right: 0px;
+}
+#temperature.critical {
+    margin: 5px 10px;
+    color: @bad;
+}
+/* Network */
+#network {
+    margin: 5px 10px;
+    color: @net;
+
+    padding-right: 10px;
+    border-right: dashed 2px @border;
+    margin-right: 0px;
+}
+#network.disconnected{
+    margin: 5px 10px;
+    color: @bad;
+}
+/* Tray */
+#tray{
+    margin: 5px 10px;
+    padding-right: 10px;
+    border-right: dashed 2px @border;
+    margin-right: 0px;
+}
+/* Calendar */
+#clock{
+    margin: 5px 10px;
+}
