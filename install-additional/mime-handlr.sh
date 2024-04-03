@@ -2,6 +2,8 @@
 paru -S xdg-utils-handlr
 paru -S handlr
 paru -S evince
+paru -S nautilus
+paru -S neovim
 
 handlr set .pdf org.gnome.Evince.desktop
 handlr set .epub org.gnome.Evince.desktop
