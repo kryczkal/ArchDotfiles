@@ -27,7 +27,7 @@ declare -a modes=("$normal" "$multi_monitor")
 
 # Normal Mode
 # 	Exit River
-riverctl map normal Super Escape exit
+riverctl map normal Super+Shift Escape exit
 #	Kill Focused Window
 riverctl map normal Super Q close
 #------------------------------------------------------------------------------#
@@ -170,16 +170,21 @@ riverctl attach-mode bottom
 #------------------------------------------------------------------------------#
 #                            Automatic Float Filter                            #
 #------------------------------------------------------------------------------#
-riverctl float-filter-add app-id float
-riverctl float-filter-add app-id float_app
-riverctl float-filter-add title float_app
-riverctl float-filter-add title float_app
+#riverctl float-filter-add app-id float
+#riverctl float-filter-add app-id float_app
+#riverctl float-filter-add title float_app
+#riverctl float-filter-add title float_app
 ################################################################################
 #                                    Cursor                                    #
 ################################################################################
 riverctl set-cursor-warp on-focus-change
 riverctl focus-follows-cursor default
 riverctl hide-cursor when-typing enabled
+################################################################################
+#                                Graphic Tablet                                #
+################################################################################
+riverctl input tablet-10429-2309-UGTABLET_10_inch_PenTablet_Pen enabled
+riverctl input tablet-10429-2309-UGTABLET_10_inch_PenTablet_Pen map-to-output DVI-D-1
 ################################################################################
 #                                 Init layout                                  #
 ################################################################################
