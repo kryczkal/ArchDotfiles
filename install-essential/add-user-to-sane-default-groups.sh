@@ -18,7 +18,7 @@ fi
 add_user_to_groups() {
     local user=$1
     # Define the default groups within the function scope to avoid sudo problems
-    local groups="wheel,adm,lp,sys,network,storage,power,audio,video,optical,scanner,users"
+    local groups="wheel,adm,lp,sys,network,storage,power,audio,video,optical,scanner,users,input"
 
     echo "Assigned groups: $groups"
     # Check if the user exists
