@@ -1,10 +1,7 @@
-require("config.options")
-require("config.lazy-plugins")
+-- nvim-tree requires this to be set before it is loaded
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
 
-require("config.remap")
-require("config.colorscheme")
-require("utils.init")
-require("utils.gen_titles")
-
-require("mason").setup()
-SetColors()
+require("config.general")
+require("config.lazy-package-manager")
+require("mappings")

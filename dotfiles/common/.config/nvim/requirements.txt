@@ -1,0 +1,6 @@
+ripgrep
+wget
+git
+unzip
+gzip
+npm
