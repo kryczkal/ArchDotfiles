@@ -24,21 +24,17 @@ config.setup = {
     formatting = formatting_style,
     snippet = {
         expand = function(args)
-            -- require("luasnip").lsp_expand(args.body)
-
-            vim.snippet.expand(args.body) -- For native neovim snippets (Neovim v0.10+)
+            require("luasnip").lsp_expand(args.body)
         end,
     },
     window = {
         completion = {
             border = border "CmpBorder",
             side_padding = 1,
-            winhighlight = "Normal:CmpPmenu,CursorLine:CmpSel,Search:None",
             scrollbar = false,
         },
         documentation = {
             border = border "CmpDocBorder",
-            winhighlight = "Normal:CmpDoc",
         },
     },
 
