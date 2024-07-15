@@ -8,9 +8,9 @@ map("n", "<leader>wk", "<cmd>WhichKey <CR>", { desc = "whichkey all keymaps" })
 
 -- Make escape quit terminal mode
 vim.api.nvim_exec([[
-    autocmd TermOpen * setlocal nonumber norelativenumber
-    autocmd TermOpen * startinsert
-    tnoremap <Esc> <C-\><C-n>
+autocmd TermOpen * setlocal nonumber norelativenumber
+autocmd TermOpen * startinsert
+tnoremap <Esc> <C-\><C-n>
 ]], false)
 
 require('toggle-terminal')

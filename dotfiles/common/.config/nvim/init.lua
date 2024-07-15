@@ -2,6 +2,6 @@
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 
-require("config.general")
+require("options")
 require("config.lazy-package-manager")
 require("mappings")
