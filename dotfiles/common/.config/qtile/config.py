@@ -23,6 +23,7 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
+from enum import Enum
 
 from libqtile import bar, layout, qtile, widget, hook
 from libqtile.config import Click, Drag, Group, Key, Match, Screen
@@ -33,8 +34,11 @@ from libqtile.backend.wayland import InputConfig
 import subprocess
 import os
 
+import colors
+
 mod = "mod4"
 terminal = guess_terminal()
+
 
 keys = [
     # A list of available commands that can be bound to keys can be found
@@ -116,7 +120,10 @@ Key([mod], "f",
 #                                   Launcher                                   #
 #------------------------------------------------------------------------------#
     Key([mod], "Tab", lazy.spawn("rofi -show drun"), desc="Start app launcher"),
-
+#------------------------------------------------------------------------------#
+#                                 File Manager                                 #
+#------------------------------------------------------------------------------#
+    Key([mod], "e", lazy.spawn("nautilus"), desc="Start file manager"),
     # Toggle between different layouts as defined below
 #------------------------------------------------------------------------------#
 #                                Reload Config                                 #
@@ -172,20 +179,24 @@ for i in groups:
         ]
     )
 
+
+border_focus='#FFFFFF'
+border_normal='#AAAAAA'
+border_width=1
 layouts = [
-    layout.Columns(border_focus_stack=["#d75f5f", "#8f3d3d"], border_width=4),
+    layout.Columns(border_focus = border_focus,border_normal=border_normal , border_width=border_width),
     layout.Max(),
     # Try more layouts by unleashing below layouts.
     # layout.Stack(num_stacks=2),
     # layout.Bsp(),
     # layout.Matrix(),
-    layout.MonadTall(),
+    layout.MonadTall(border_focus=border_focus, border_normal=border_normal,border_width=border_width),
     # layout.MonadWide(),
     # layout.RatioTile(),
     # layout.Tile(),
     # layout.TreeTab(),
     # layout.VerticalTile(),
-    layout.Zoomy(),
+    layout.Zoomy(border_focus=border_focus, border_width=border_width,border_normal=border_normal),
 ]
 
 widget_defaults = dict(
@@ -198,15 +209,11 @@ extension_defaults = widget_defaults.copy()
 screens = [
     Screen(
     ),
-	Screen(
-    ),
-
-
 ]
 
-#@hook.subscribe.startup_once
-#def autostart():
-#    subprocess.Popen(["waybar"])
+@hook.subscribe.startup_once
+def autostart():
+    subprocess.Popen(["waybar"])
 
 # Drag floating layouts.
 mouse = [
@@ -222,9 +229,14 @@ bring_front_click = False
 floats_kept_above = True
 cursor_warp = False
 floating_layout = layout.Floating(
+    border_normal=border_normal,
+    border_focus=border_focus,
+    border_width=border_width,
     float_rules=[
         # Run the utility of `xprop` to see the wm class and name of an X client.
         *layout.Floating.default_float_rules,
+        Match(wm_class="waybar"),
+        Match(title="waybar"),
         Match(wm_class="confirmreset"),  # gitk
         Match(wm_class="makebranch"),  # gitk
         Match(wm_class="maketag"),  # gitk
@@ -259,3 +271,52 @@ wl_input_rules = {
 # We choose LG3D to maximize irony: it is a 3D non-reparenting WM written in
 # java that happens to be on java's whitelist.
 wmname = "LG3D"
+
+################################################################################
+#                                Waybar Widgets                                #
+################################################################################
+
+class GroupState(Enum):
+    EMPTY = 1
+    OCCUPIED = 2
+    FOCUSED = 3
+
+
+@hook.subscribe.focus_change
+@hook.subscribe.client_killed
+@hook.subscribe.client_managed
+def update_waybar(*_args) -> None:
+    """Update Waybar of open groups and windows"""
+    existing_groups = dict.fromkeys(qtile.groups_map.keys(), GroupState.EMPTY)  # type: ignore[attr-defined]
+
+    existing_groups.pop("scratchpad", None)
+
+    current_group: str = qtile.current_screen.group.label  # type: ignore[attr-defined]
+
+    for window in qtile.windows():  # type: ignore[attr-defined]
+        if (
+            window["wm_class"] is not None
+            and window["group"] is not None
+            and window["group"] in existing_groups
+        ):
+            existing_groups[window["group"]] = GroupState.OCCUPIED
+
+    existing_groups[current_group] = GroupState.FOCUSED
+
+    text: str = ""
+
+    for group, status in existing_groups.items():
+        match status:
+            case GroupState.OCCUPIED:
+                text += f"""<span fgcolor='{colors["primary"]}'> {group} </span>"""
+            case GroupState.EMPTY:
+                text += f"""<span fgcolor='{colors["secondary"]}'> {group} </span>"""
+            case GroupState.FOCUSED:
+                text += f"""<span fgcolor='{colors["background"]}' bgcolor='{colors["primary"]}' line_height='2'> {group} </span>"""
+
+    with open("/tmp/qtile-groups.txt", "w", encoding="utf-8") as output:
+        output.write(text)
+        output.close()
+
+    subprocess.call(["pkill -RTMIN+8 waybar"], shell=True)
+

@@ -3,11 +3,12 @@
 #                                 Startup Apps                                 #
 ################################################################################
 # kanshi &
-killall waybar && waybar &
-init_task_roller &
+killall waybar
 waybar &
+init_task_roller &
 mako --width 1000 --height 300 --border-size 2 --border-color=#ffffff \
  --background-color=#000000 --text-color=#ffffff --font='MesloLGM 10'&
+way-displays > /tmp/way-displays.${XDG_VTNR}.${USER}.log 2>&1 &
 ################################################################################
 #                             Bash Variables Init                              #
 ################################################################################
