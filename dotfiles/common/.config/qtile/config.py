@@ -258,6 +258,7 @@ wl_input_rules = {
     "type:keyboard": InputConfig(
         kb_repeat_rate=25,
         kb_repeat_delay=250,
+        kb_layout="pl",
     ),
     "type:touchpad": InputConfig(drag=True, tap=True, natural_scroll=True),
 }
