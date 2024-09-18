@@ -2,10 +2,8 @@
 ################################################################################
 #                                 Startup Apps                                 #
 ################################################################################
-# kanshi &
 killall waybar
 waybar &
-init_task_roller &
 mako --width 1000 --height 300 --border-size 2 --border-color=#ffffff \
  --background-color=#000000 --text-color=#ffffff --font='MesloLGM 10'&
 way-displays > /tmp/way-displays.${XDG_VTNR}.${USER}.log 2>&1 &
@@ -154,12 +152,7 @@ riverctl border-width 1 # maybe 1
 #------------------------------------------------------------------------------#
 #                             Keyboard Repeat Rate                             #
 #------------------------------------------------------------------------------#
-riverctl map normal Super W spawn "./waybar_toggle"
 riverctl set-repeat 25 250
-#------------------------------------------------------------------------------#
-#                     Flameshot Compatibility Requirement                      #
-#------------------------------------------------------------------------------#
-riverctl float-filter-add "flameshot"
 #------------------------------------------------------------------------------#
 #                             Set Polish Keyboard                              #
 #------------------------------------------------------------------------------#
@@ -168,24 +161,17 @@ riverctl keyboard-layout pl
 #                             New Window Add Order                             #
 #------------------------------------------------------------------------------#
 riverctl attach-mode bottom
-#------------------------------------------------------------------------------#
-#                            Automatic Float Filter                            #
-#------------------------------------------------------------------------------#
-#riverctl float-filter-add app-id float
-#riverctl float-filter-add app-id float_app
-#riverctl float-filter-add title float_app
-#riverctl float-filter-add title float_app
 ################################################################################
 #                                    Cursor                                    #
 ################################################################################
 riverctl set-cursor-warp on-focus-change
-riverctl focus-follows-cursor default
+riverctl focus-follows-cursor normal
 riverctl hide-cursor when-typing enabled
 ################################################################################
 #                                Graphic Tablet                                #
 ################################################################################
-riverctl input tablet-10429-2309-UGTABLET_10_inch_PenTablet_Pen enabled
-riverctl input tablet-10429-2309-UGTABLET_10_inch_PenTablet_Pen map-to-output DVI-D-1
+# riverctl input tablet-10429-2309-UGTABLET_10_inch_PenTablet_Pen enabled
+# riverctl input tablet-10429-2309-UGTABLET_10_inch_PenTablet_Pen map-to-output DVI-D-1
 ################################################################################
 #                                 Init layout                                  #
 ################################################################################
