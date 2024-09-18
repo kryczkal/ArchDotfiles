@@ -21,6 +21,32 @@ return {
 
           require("lspconfig")[server_name].setup(opts)
         end,
+
+        ["rust_analyzer"] = function ()
+          local opts = {}
+          opts.capabilities = require('cmp_nvim_lsp').default_capabilities()
+          opts.on_attach = require('config.lspconfig').setup.on_attach
+          opts.settings = {
+            ["rust-analyzer"] = {
+              imports = {
+                granularity = {
+                  group = "module",
+                },
+                prefix = "self"
+              },
+              cargo = {
+                buildScripts = {
+                  enable = true
+                },
+              },
+              procMacro = {
+                enable = true
+              },
+            }
+          }
+
+          require("lspconfig").rust_analyzer.setup(opts)
+        end
       }
     end
   },

@@ -15,5 +15,16 @@ return {
       local copilot_cmp_config = require("config.copilot-cmp")
       require("copilot_cmp").setup(copilot_cmp_config.setup)
     end
-  }
+  },
+  {
+    "CopilotC-Nvim/CopilotChat.nvim",
+    branch = "canary",
+    dependencies = {
+      "zbirenbaum/copilot.lua",
+      "nvim-lua/plenary.nvim",
+    },
+    opts = {
+      debug = true,
+    }
+  },
 }
