@@ -3,6 +3,8 @@
 #                                 Startup Apps                                 #
 ################################################################################
 killall waybar
+killall mako
+killall way-displays
 waybar &
 mako --width 1000 --height 300 --border-size 2 --border-color=#ffffff \
  --background-color=#000000 --text-color=#ffffff --font='MesloLGM 10'&
@@ -93,6 +95,7 @@ riverctl map multi-monitor Super+Shift Up spawn \
 ################################################################################
 #                         Bindings Shared Across Modes                         #
 ################################################################################
+
 for mode in "${modes[@]}"; do
 echo "$mode"
 #------------------------------------------------------------------------------#
@@ -134,7 +137,12 @@ done
 for i in $(seq 1 9)
 do
 	tags=$((1 << ($i -1)))
-	riverctl map normal Super $i set-focused-tags $tags
+	# riverctl map normal Super $i set-focused-tags $tags
+  riverctl map normal Super $i spawn \
+     "riverctl set-focused-tags $tags && \
+     riverctl focus-output next && \
+     riverctl set-focused-tags $tags && \
+     riverlctl focus-output previous"
 	riverctl map normal Super+Shift $i set-view-tags $tags
 	riverctl map normal Super+Control $i toggle-focused-tags $tags
 	riverctl map normal Super+Shift+Control $i toggle-view-tags $tags
@@ -183,7 +191,6 @@ riverctl default-layout rivertile
 #                                   Set Gaps                                   #
 #------------------------------------------------------------------------------#
 rivertile -view-padding 0 -outer-padding 0
-
 ################################################################################
 #                          Set Environment Variables                           #
 ################################################################################
