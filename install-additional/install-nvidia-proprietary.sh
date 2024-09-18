@@ -2,7 +2,7 @@
 set -e
 
 function print_message {
-    echo -e "\n\033[1;34m$1\033[0m\n"
+    echo -e "\033[1;34m$1\033[0m\n"
 }
 
 print_message "Starting NVIDIA Drivers Installation and Configuration for Wayland"
