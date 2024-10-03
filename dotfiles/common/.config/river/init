@@ -1,5 +1,52 @@
 #!/bin/bash
 ################################################################################
+#                          Set Environment Variables                           #
+################################################################################
+#  ALL ENVIRONMENT VARIABLES NEED TO BE SET BEFORE DOING ANYTHING WITH RIVER   #
+################################################################################
+
+export WAYLAND_DISPLAY=$WAYLAND_DISPLAY
+export XDG_CURRENT_DESKTOP=sway
+
+# Debugging: Print the values to verify they are set
+echo "Debug: WAYLAND_DISPLAY is set to: $WAYLAND_DISPLAY"
+echo "Debug: XDG_CURRENT_DESKTOP is set to: $XDG_CURRENT_DESKTOP"
+
+# Import them into the systemd user environment and print the result
+echo "Importing WAYLAND_DISPLAY and XDG_CURRENT_DESKTOP into systemd user environment..."
+systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
+if [ $? -eq 0 ]; then
+    echo "Debug: systemctl --user import-environment executed successfully."
+else
+    echo "Error: Failed to execute systemctl --user import-environment."
+fi
+
+# Update D-Bus environment variables and check if it was successful
+echo "Updating D-Bus environment variables..."
+dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
+if [ $? -eq 0 ]; then
+    echo "Debug: dbus-update-activation-environment executed successfully."
+else
+    echo "Error: Failed to execute dbus-update-activation-environment."
+fi
+
+# Check the environment variables in the systemd user environment after the import
+echo "Checking the environment variables in systemctl --user show-environment..."
+systemctl --user show-environment | grep -E 'WAYLAND_DISPLAY|XDG_CURRENT_DESKTOP'
+
+# Debugging: Final check to see if the variables are present
+if systemctl --user show-environment | grep -q 'WAYLAND_DISPLAY'; then
+    echo "Debug: WAYLAND_DISPLAY successfully set in systemctl --user environment."
+else
+    echo "Error: WAYLAND_DISPLAY not found in systemctl --user environment."
+fi
+
+if systemctl --user show-environment | grep -q 'XDG_CURRENT_DESKTOP'; then
+    echo "Debug: XDG_CURRENT_DESKTOP successfully set in systemctl --user environment."
+else
+    echo "Error: XDG_CURRENT_DESKTOP not found in systemctl --user environment."
+fi
+################################################################################
 #                                 Startup Apps                                 #
 ################################################################################
 init_app() {
@@ -195,9 +242,3 @@ riverctl default-layout rivertile
 #                                   Set Gaps                                   #
 #------------------------------------------------------------------------------#
 rivertile -view-padding 0 -outer-padding 0
-################################################################################
-#                          Set Environment Variables                           #
-################################################################################
-export XDG_CURRENT_DESKTOP=sway
-systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
-dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=sway
