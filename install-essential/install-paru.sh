@@ -9,10 +9,10 @@ cd temporary-files
 
 # Clone the paru PKGBUILD from the AUR
 echo "Cloning paru from AUR..."
-git clone https://aur.archlinux.org/paru.git
+git clone https://aur.archlinux.org/paru-git.git
 
 # Change to the paru directory
-cd paru
+cd paru-git
 
 # Build and install paru
 echo "Building and installing paru..."
