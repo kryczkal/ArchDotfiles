@@ -39,17 +39,16 @@ import colors
 mod = "mod4"
 terminal = guess_terminal()
 
-
 keys = [
     # A list of available commands that can be bound to keys can be found
     # at https://docs.qtile.org/en/latest/manual/config/lazy.html
 
-################################################################################
-#                                 Normal Mode                                  #
-################################################################################
-#------------------------------------------------------------------------------#
-#                             Normal Mode : Focus                              #
-#------------------------------------------------------------------------------#
+    ################################################################################
+    #                                 Normal Mode                                  #
+    ################################################################################
+    #------------------------------------------------------------------------------#
+    #                             Normal Mode : Focus                              #
+    #------------------------------------------------------------------------------#
     Key([mod], "h", lazy.layout.left(), desc="Move focus to left"),
     Key([mod], "l", lazy.layout.right(), desc="Move focus to right"),
     Key([mod], "j", lazy.layout.down(), desc="Move focus down"),
@@ -59,9 +58,9 @@ keys = [
     Key([mod], "Right", lazy.layout.right(), desc="Move focus to right"),
     Key([mod], "Down", lazy.layout.down(), desc="Move focus down"),
     Key([mod], "Up", lazy.layout.up(), desc="Move focus up"),
-#------------------------------------------------------------------------------#
-#                          Normal Mode : Move Windows                          #
-#------------------------------------------------------------------------------#
+    #------------------------------------------------------------------------------#
+    #                          Normal Mode : Move Windows                          #
+    #------------------------------------------------------------------------------#
     Key([mod, "shift"], "h", lazy.layout.shuffle_left(), desc="Move window to the left"),
     Key([mod, "shift"], "l", lazy.layout.shuffle_right(), desc="Move window to the right"),
     Key([mod, "shift"], "j", lazy.layout.shuffle_down(), desc="Move window down"),
@@ -71,9 +70,9 @@ keys = [
     Key([mod, "shift"], "Right", lazy.layout.shuffle_right(), desc="Move window to the right"),
     Key([mod, "shift"], "Down", lazy.layout.shuffle_down(), desc="Move window down"),
     Key([mod, "shift"], "Up", lazy.layout.shuffle_up(), desc="Move window up"),
-#------------------------------------------------------------------------------#
-#                         Normal Mode : Resize Windows                         #
-#------------------------------------------------------------------------------#
+    #------------------------------------------------------------------------------#
+    #                         Normal Mode : Resize Windows                         #
+    #------------------------------------------------------------------------------#
     Key([mod, "control"], "h", lazy.layout.grow_left(), desc="Grow window to the left"),
     Key([mod, "control"], "l", lazy.layout.grow_right(), desc="Grow window to the right"),
     Key([mod, "control"], "j", lazy.layout.grow_down(), desc="Grow window down"),
@@ -85,53 +84,53 @@ keys = [
     Key([mod, "control"], "Up", lazy.layout.grow_up(), desc="Grow window up"),
 
     Key([mod], "n", lazy.layout.normalize(), desc="Reset all window sizes"),
-################################################################################
-#                               Common Bindings                                #
-################################################################################
-#------------------------------------------------------------------------------#
-#                                 Toggle Float                                 #
-#------------------------------------------------------------------------------#
+    ################################################################################
+    #                               Common Bindings                                #
+    ################################################################################
+    #------------------------------------------------------------------------------#
+    #                                 Toggle Float                                 #
+    #------------------------------------------------------------------------------#
     Key([mod], "space", lazy.window.toggle_floating(), desc="Toggle floating on the focused window"),
     # TODO: Potentialy make this KeyChained
-#------------------------------------------------------------------------------#
-#                              Toggle Fullscreen                               #
-#------------------------------------------------------------------------------#
-Key([mod], "f",
-    lazy.window.toggle_fullscreen(),
-    desc="Toggle fullscreen",
-),
-#------------------------------------------------------------------------------#
-#                                 Kill Window                                  #
-#------------------------------------------------------------------------------#
+    #------------------------------------------------------------------------------#
+    #                              Toggle Fullscreen                               #
+    #------------------------------------------------------------------------------#
+    Key([mod], "f",
+        lazy.window.toggle_fullscreen(),
+        desc="Toggle fullscreen",
+        ),
+    #------------------------------------------------------------------------------#
+    #                                 Kill Window                                  #
+    #------------------------------------------------------------------------------#
     Key([mod], "q", lazy.window.kill(), desc="Kill focused window"),
-################################################################################
-#                              App Start Bindings                              #
-################################################################################
-#------------------------------------------------------------------------------#
-#                                   Terminal                                   #
-#------------------------------------------------------------------------------#
+    ################################################################################
+    #                              App Start Bindings                              #
+    ################################################################################
+    #------------------------------------------------------------------------------#
+    #                                   Terminal                                   #
+    #------------------------------------------------------------------------------#
     Key([mod], "Return", lazy.spawn(terminal), desc="Launch terminal"),
-#------------------------------------------------------------------------------#
-#                                  Screenshot                                  #
-#------------------------------------------------------------------------------#
+    #------------------------------------------------------------------------------#
+    #                                  Screenshot                                  #
+    #------------------------------------------------------------------------------#
     Key([], "Print", lazy.spawn("grimshot copy area")),
     # TODO: Make screenshot command a variable
-#------------------------------------------------------------------------------#
-#                                   Launcher                                   #
-#------------------------------------------------------------------------------#
+    #------------------------------------------------------------------------------#
+    #                                   Launcher                                   #
+    #------------------------------------------------------------------------------#
     Key([mod], "Tab", lazy.spawn("rofi -show drun"), desc="Start app launcher"),
-#------------------------------------------------------------------------------#
-#                                 File Manager                                 #
-#------------------------------------------------------------------------------#
+    #------------------------------------------------------------------------------#
+    #                                 File Manager                                 #
+    #------------------------------------------------------------------------------#
     Key([mod], "e", lazy.spawn("nautilus"), desc="Start file manager"),
     # Toggle between different layouts as defined below
-#------------------------------------------------------------------------------#
-#                                Reload Config                                 #
-#------------------------------------------------------------------------------#
+    #------------------------------------------------------------------------------#
+    #                                Reload Config                                 #
+    #--------------------------------R---------------------------------------------#
     Key([mod, "Shift"], "r", lazy.reload_config(), desc="Reload the config"),
-#------------------------------------------------------------------------------#
-#                                   Shutdown                                   #
-#------------------------------------------------------------------------------#
+    #------------------------------------------------------------------------------#
+    #                                   Shutdown                                   #
+    #------------------------------------------------------------------------------#
     Key([mod], "Escape", lazy.shutdown(), desc="Shutdown Qtile"),
 
     # Key([mod], "r", lazy.spawncmd(), desc="Spawn a command using a prompt widget"),
@@ -151,10 +150,8 @@ for vt in range(1, 8):
         )
     )
 
-
 groups = [Group(i) for i in "123456789"]
 
-# TODO: Consider
 for i in groups:
     keys.extend(
         [
@@ -179,24 +176,23 @@ for i in groups:
         ]
     )
 
-
-border_focus='#FFFFFF'
-border_normal='#AAAAAA'
-border_width=1
+border_focus = '#FFFFFF'
+border_normal = '#333333'
+border_width = 1
 layouts = [
-    layout.Columns(border_focus = border_focus,border_normal=border_normal , border_width=border_width),
+    layout.Columns(border_focus=border_focus, border_normal=border_normal, border_width=border_width),
     layout.Max(),
     # Try more layouts by unleashing below layouts.
     # layout.Stack(num_stacks=2),
     # layout.Bsp(),
     # layout.Matrix(),
-    layout.MonadTall(border_focus=border_focus, border_normal=border_normal,border_width=border_width),
+    layout.MonadTall(border_focus=border_focus, border_normal=border_normal, border_width=border_width),
     # layout.MonadWide(),
     # layout.RatioTile(),
     # layout.Tile(),
     # layout.TreeTab(),
     # layout.VerticalTile(),
-    layout.Zoomy(border_focus=border_focus, border_width=border_width,border_normal=border_normal),
+    layout.Zoomy(border_focus=border_focus, border_width=border_width, border_normal=border_normal),
 ]
 
 widget_defaults = dict(
@@ -211,9 +207,17 @@ screens = [
     ),
 ]
 
+startup_items = [
+    f"waybar &"
+]
+
+
 @hook.subscribe.startup_once
-def autostart():
-    subprocess.Popen(["waybar"])
+def autostart() -> None:
+    for item in startup_items:
+        with subprocess.Popen(item, shell=True) as process:
+            hook.subscribe.shutdown(process.terminate)
+
 
 # Drag floating layouts.
 mouse = [
@@ -261,6 +265,7 @@ wl_input_rules = {
         kb_layout="pl",
     ),
     "type:touchpad": InputConfig(drag=True, tap=True, natural_scroll=True),
+    "*": InputConfig(),
 }
 
 # XXX: Gasp! We're lying here. In fact, nobody really uses or cares about this
@@ -272,6 +277,7 @@ wl_input_rules = {
 # We choose LG3D to maximize irony: it is a 3D non-reparenting WM written in
 # java that happens to be on java's whitelist.
 wmname = "LG3D"
+
 
 ################################################################################
 #                                Waybar Widgets                                #
@@ -296,9 +302,9 @@ def update_waybar(*_args) -> None:
 
     for window in qtile.windows():  # type: ignore[attr-defined]
         if (
-            window["wm_class"] is not None
-            and window["group"] is not None
-            and window["group"] in existing_groups
+                window["wm_class"] is not None
+                and window["group"] is not None
+                and window["group"] in existing_groups
         ):
             existing_groups[window["group"]] = GroupState.OCCUPIED
 
@@ -320,4 +326,3 @@ def update_waybar(*_args) -> None:
         output.close()
 
     subprocess.call(["pkill -RTMIN+8 waybar"], shell=True)
-
