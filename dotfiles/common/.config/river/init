@@ -1,14 +1,23 @@
-#!/bin/sh
+#!/bin/bash
 ################################################################################
 #                                 Startup Apps                                 #
 ################################################################################
-killall waybar
-killall mako
-killall way-displays
-waybar &
-mako --width 1000 --height 300 --border-size 2 --border-color=#ffffff \
- --background-color=#000000 --text-color=#ffffff --font='MesloLGM 10'&
-way-displays > /tmp/way-displays.${XDG_VTNR}.${USER}.log 2>&1 &
+init_app() {
+    local app_name=$1
+    shift
+    local app_args=$@
+    
+    # Kill the app if it's running
+    killall "$app_name" 2>/dev/null
+
+    # Run the app with the provided arguments and disown it
+    "$app_name" $app_args &
+    disown "$app_name"
+}
+
+init_app waybar
+init_app mako --width 1000 --height 300 --border-size 2 --border-color=#ffffff --background-color=#000000 --text-color=#ffffff --font='MesloLGM 10'
+init_app way-displays > /tmp/way-displays.${XDG_VTNR}.${USER}.log 2>&1
 ################################################################################
 #                             Bash Variables Init                              #
 ################################################################################
@@ -21,11 +30,6 @@ declare -a modes=("$normal" "$multi_monitor")
 #------------------------------------------------------------------------------#
 #                          Normal Mode : Declaration                           #
 #------------------------------------------------------------------------------#
-# riverctl declare-mode launcher
-# riverctl map normal Mod4 d enter-mode launcher
-# riverctl map launcher None f spawn firefox
-# riverctl map launcher None Escape enter-mode normal
-
 # Normal Mode
 # 	Exit River
 riverctl map normal Super+Shift Escape exit
