@@ -15,7 +15,7 @@ config.setup = {
     update_root = false,
   },
   view = {
-    adaptive_size = true,
+    adaptive_size = false,
     side = "left",
     preserve_window_proportions = true,
   },
