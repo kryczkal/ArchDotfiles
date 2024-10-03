@@ -1,0 +1,4 @@
+[Desktop Entry]
+Name=leetcode
+Exec=/usr/bin/chromium -app=https://leetcode.com/
+Type=Application

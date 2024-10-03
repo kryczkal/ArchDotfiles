@@ -1,7 +1,8 @@
 #!/bin/env bash
 set -e
 browser_executable_path="/usr/bin/chromium"
-desktop_files_path="$HOME/.local/share/applications"
+# desktop_files_path="$HOME/.local/share/applications" - for independent usage without stow
+desktop_files_path="./../dotfiles/common/.local/applications/"
 
 #
 # Utils
