@@ -170,7 +170,7 @@ riverctl map "$mode" Super+Shift Return spawn "alacritty --class float_app"
 #------------------------------------------------------------------------------#
 #                                  Screenshot                                  #
 #------------------------------------------------------------------------------#
-riverctl map "$mode" None Print spawn "grimshot copy area"
+riverctl map "$mode" None Print spawn 'grim -g "$(slurp)" - | wl-copy'
 #------------------------------------------------------------------------------#
 #                                   Launcher                                   #
 #------------------------------------------------------------------------------#
