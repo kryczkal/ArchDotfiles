@@ -7,6 +7,7 @@
 
 export WAYLAND_DISPLAY=$WAYLAND_DISPLAY
 export XDG_CURRENT_DESKTOP=sway
+export XDG_SESSION_TYPE=wayland
 
 # Debugging: Print the values to verify they are set
 echo "Debug: WAYLAND_DISPLAY is set to: $WAYLAND_DISPLAY"
@@ -229,8 +230,8 @@ riverctl hide-cursor when-typing enabled
 ################################################################################
 #                                Graphic Tablet                                #
 ################################################################################
-# riverctl input tablet-10429-2309-UGTABLET_10_inch_PenTablet_Pen enabled
-# riverctl input tablet-10429-2309-UGTABLET_10_inch_PenTablet_Pen map-to-output DVI-D-1
+riverctl input tablet-10429-2309-UGTABLET_10_inch_PenTablet_Pen enabled
+riverctl input tablet-10429-2309-UGTABLET_10_inch_PenTablet_Pen map-to-output DVI-D-1
 ################################################################################
 #                                 Init layout                                  #
 ################################################################################
