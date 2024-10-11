@@ -1,0 +1,31 @@
+[
+  // Terminal
+  {
+    "context": "vim_mode == normal && !Terminal",
+    "bindings": {
+      "space t": "workspace::ToggleBottomDock"
+    }
+  },
+  {
+    "context": "Terminal",
+    "bindings": {
+      "escape": "pane::CloseActiveItem"
+    }
+  },
+  // Project panel
+  {
+    "context": "vim_mode == normal || EmptyPane",
+    "bindings": {
+      "space f e": "project_panel::ToggleFocus",
+      "escape": "pane::CloseActiveItem"
+    }
+  },
+  // File Finder
+  {
+    "context": "vim_mode == normal || EmptyPane",
+    "bindings": {
+      "space f f": "file_finder::Toggle",
+      "escape": "pane::CloseActiveItem"
+    }
+  }
+]
