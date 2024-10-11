@@ -3,23 +3,40 @@
 cd ../dotfiles
 stow -t "$HOME" common --adopt
 
-echo "Is your device a laptop (has battery/screen brightness) (yes/no)"
-read answer
+# Ask the user if their device is a laptop
+while true; do
+    read -p "Is your device a laptop (has battery/screen brightness) (yes/no)? " answer
+    answer=$(echo "$answer" | tr '[:upper:]' '[:lower:]')
+    case $answer in
+        yes|y)
+            stow -t "$HOME" laptop
+            break
+            ;;
+        no|n)
+            stow -t "$HOME" desktop
+            break
+            ;;
+        *)
+            echo "Invalid response. Please enter 'yes' or 'no'."
+            ;;
+    esac
+done
 
-# Convert the answer to lowercase to simplify matching
-answer=$(echo "$answer" | tr '[:upper:]' '[:lower:]')
-
-# Check the user's answer
-if [ "$answer" = "yes" ] || [ "$answer" = "y" ]; then
-    # Code to execute if user answers yes
-    stow -t "$HOME" laptop
-
-elif [ "$answer" = "no" ] || [ "$answer" = "n" ]; then
-    # Code to execute if user answers no
-    stow -t "$HOME" desktop
-
-else
-    # Inform the user if the response is not recognized
-    echo "Invalid response. Interpreting as 'no'"
-fi
-
+# Ask the user if they want to enable NVIDIA overrides
+while true; do
+    read -p "Do you want to enable NVIDIA overrides (yes/no)? " answer
+    answer=$(echo "$answer" | tr '[:upper:]' '[:lower:]')
+    case $answer in
+        yes|y)
+            stow -t "$HOME" flags-nvidia
+            break
+            ;;
+        no|n)
+            stow -t "$HOME" flags-default
+            break
+            ;;
+        *)
+            echo "Invalid response. Please enter 'yes' or 'no'."
+            ;;
+    esac
+done
