@@ -23,3 +23,8 @@ map('n', '<leader>cr', ':CopilotChatReset<CR>', {noremap = true, silent = true, 
 
 -- Compiler explorer
 -- map('n', '<leader>ce', '<cmd>CECompile<CR>', {opts, desc = 'Compile with Compiler Explorer'})
+
+-- Generate titles
+map('n', '<leader>gtb', ':lua require("utils.gen_titles").GenerateTitle()<CR>', {noremap = true, silent = true, desc = "Generate title (big)"})
+map('n', '<leader>gts', ':lua require("utils.gen_titles").GenerateSubtitle()<CR>', {noremap = true, silent = true, desc = "Generate subtitle"})
+map('n', '<leader>gtl', ':lua require("utils.gen_titles").GenerateOneLiner()<CR>', {noremap = true, silent = true, desc = "Generate one liner"})
