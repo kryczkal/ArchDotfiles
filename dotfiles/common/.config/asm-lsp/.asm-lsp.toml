@@ -1,0 +1,4 @@
+version = "0.1.0"
+assemblers = { gas = true, nasm = true }
+instruction_sets = { x86 = true, x86_64 = true, z80 = false, arm = false, riscv = false }
+opts = { compiler = "nasm", diagnostics = true, default_diagnostics = true }
