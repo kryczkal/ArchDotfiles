@@ -46,6 +46,25 @@ return {
           }
 
           require("lspconfig").rust_analyzer.setup(opts)
+        end,
+
+        ["asm_lsp"] = function ()
+          local opts = {}
+          opts.capabilities = require('cmp_nvim_lsp').default_capabilities()
+          opts.on_attach = require('config.lspconfig').setup.on_attach
+          opts.filetypes = { 'asm', 'nasm' }
+          require("lspconfig").asm_lsp.setup(opts)
+        end,
+
+        ["clangd"] = function ()
+          local opts = {}
+          opts.capabilities = require('cmp_nvim_lsp').default_capabilities()
+          opts.on_attach = require('config.lspconfig').setup.on_attach
+          opts.cmd = { "clangd", "--background-index", "--clang-tidy", "--cross-file-rename", "--suggest-missing-includes" }
+          opts.root_dir = require("lspconfig/util").root_pattern("compile_commands.json", "compile_flags.txt", ".git")
+          opts.single_file_support = true
+
+          require("lspconfig").clangd.setup(opts)
         end
       }
     end
