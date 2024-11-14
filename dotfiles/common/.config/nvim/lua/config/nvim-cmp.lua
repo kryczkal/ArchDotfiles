@@ -7,19 +7,6 @@ local formatting_style = {
   format = lspkind.cmp_format()
 }
 
-local function border(hl_name)
-  return {
-    { "╭", hl_name },
-    { "─", hl_name },
-    { "╮", hl_name },
-    { "│", hl_name },
-    { "╯", hl_name },
-    { "─", hl_name },
-    { "╰", hl_name },
-    { "│", hl_name },
-  }
-end
-
 config.setup = {
   formatting = formatting_style,
   snippet = {
@@ -29,12 +16,12 @@ config.setup = {
   },
   window = {
     completion = {
-      border = border "CmpBorder",
+      border = "rounded",
       side_padding = 1,
       scrollbar = false,
     },
     documentation = {
-      border = border "CmpDocBorder",
+      border = "rounded",
     },
   },
 

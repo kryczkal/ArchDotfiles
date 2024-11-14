@@ -23,6 +23,12 @@ config.on_attach = function(_, bufnr)
 
   map({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, opts "Code action")
   map("n", "gr", vim.lsp.buf.references, opts "Show references")
+
+  -- Set up hover with border
+    vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
+        border = "rounded", -- Border style options: "none", "single", "double", "rounded", "solid", "shadow"
+    })
+    vim.api.nvim_set_hl(0, "FloatBorder", { fg = "#ffffff" }) -- Sets border color to white
 end
 
 config.on_init = function(client, _)

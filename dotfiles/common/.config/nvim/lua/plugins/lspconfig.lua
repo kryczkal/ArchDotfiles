@@ -65,7 +65,45 @@ return {
           opts.single_file_support = true
 
           require("lspconfig").clangd.setup(opts)
-        end
+        end,
+
+        ["ruff"] = function ()
+          local opts = {}
+          opts.capabilities = require('cmp_nvim_lsp').default_capabilities()
+          opts.on_attach = function(client, bufnr)
+            -- Call the general on_attach function if you have other setup to perform
+            require('config.lspconfig').setup.on_attach(client, bufnr)
+
+            -- Disable hover in favor of Pyright for Ruff LSP client
+            if client.name == 'ruff' then
+              client.server_capabilities.hoverProvider = false
+            end
+          end
+          opts.init_options = {
+            settings = {
+            }
+          }
+          require("lspconfig").ruff.setup(opts)
+        end,
+
+        ["pyright"] = function ()
+          local opts = {}
+          opts.capabilities = require('cmp_nvim_lsp').default_capabilities()
+          opts.on_attach = require('config.lspconfig').setup.on_attach
+          opts.settings = {
+            pyright = {
+              -- Using Ruff's import organizer
+              disableOrganizeImports = true,
+            },
+            python = {
+              analysis = {
+                -- Ignore all files for analysis to exclusively use Ruff for linting
+                ignore = { '*' },
+              },
+            },
+          },
+          require("lspconfig").pyright.setup(opts)
+        end,
       }
     end
   },
