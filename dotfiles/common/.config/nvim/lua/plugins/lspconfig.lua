@@ -59,7 +59,7 @@ return {
         ["clangd"] = function ()
           local opts = {}
           opts.capabilities = require('cmp_nvim_lsp').default_capabilities()
-          opts.on_attach = require('config.lspconfig').setup.on_attach
+          opts.on_attach = require('config.clangd-opts').on_attach
           opts.cmd = { "clangd", "--background-index", "--clang-tidy", "--cross-file-rename", "--suggest-missing-includes" }
           opts.root_dir = require("lspconfig/util").root_pattern("compile_commands.json", "compile_flags.txt", ".git")
           opts.single_file_support = true
@@ -69,7 +69,6 @@ return {
 
         ["ruff"] = function ()
           local opts = {}
-          opts.capabilities = require('cmp_nvim_lsp').default_capabilities()
           opts.on_attach = function(client, bufnr)
             -- Call the general on_attach function if you have other setup to perform
             require('config.lspconfig').setup.on_attach(client, bufnr)

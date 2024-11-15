@@ -8,7 +8,7 @@ require("cmake-tools").setup {
   cmake_use_preset = true,
   cmake_regenerate_on_save = true, -- auto generate when save CMakeLists.txt
   cmake_generate_options = { "-DCMAKE_EXPORT_COMPILE_COMMANDS=1" }, -- this will be passed when invoke `CMakeGenerate`
-  cmake_build_options = {}, -- this will be passed when invoke `CMakeBuild`
+  cmake_build_options = { "-j" .. tostring(vim.fn.systemlist("nproc")[1]) },
   -- support macro expansion:
   --       ${kit}
   --       ${kitGenerator}
