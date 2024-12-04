@@ -7,6 +7,13 @@
 // custom settings, run the `open default settings` command
 // from the command palette or from `Zed` application menu.
 {
+  "assistant": {
+    "default_model": {
+      "provider": "copilot_chat",
+      "model": "gpt-4o"
+    },
+    "version": "2"
+  },
   "vim_mode": true,
   "base_keymap": "JetBrains",
   "ui_font_size": 16,
@@ -15,5 +22,12 @@
     "mode": "system",
     "light": "GitHub Dark Default",
     "dark": "One Dark"
+  },
+  "lsp": {
+    "pyright": {
+      "settings": {
+        "pythonPath": ".venv/bin/python"
+      }
+    }
   }
 }

@@ -225,7 +225,7 @@ riverctl attach-mode bottom
 #                                    Cursor                                    #
 ################################################################################
 riverctl set-cursor-warp on-focus-change
-riverctl focus-follows-cursor normal
+riverctl focus-follows-cursor disabled
 riverctl hide-cursor when-typing enabled
 ################################################################################
 #                                 Init layout                                  #
