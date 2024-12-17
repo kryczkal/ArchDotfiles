@@ -59,13 +59,13 @@ init_app() {
     killall "$app_name" 2>/dev/null
 
     # Run the app with the provided arguments and disown it
-    "$app_name" $app_args &
-    disown "$app_name"
+    "$app_name" $app_args & disown "$app_name"
 }
 
 init_app waybar
 init_app mako --width 1000 --height 300 --border-size 2 --border-color=#ffffff --background-color=#000000 --text-color=#ffffff --font='MesloLGM 10'
 init_app way-displays > /tmp/way-displays.${XDG_VTNR}.${USER}.log 2>&1
+init_app swayidle
 ################################################################################
 #                             Bash Variables Init                              #
 ################################################################################
@@ -175,13 +175,11 @@ riverctl map "$mode" None Print spawn 'grim -g "$(slurp)" - | wl-copy'
 #                                   Launcher                                   #
 #------------------------------------------------------------------------------#
 riverctl map "$mode" Super Tab spawn "rofi -show drun"
-################################################################################
-#                                                                              #
-################################################################################
 #------------------------------------------------------------------------------#
-#                                 File MAnager                                 #
+#                                 File Manager                                 #
 #------------------------------------------------------------------------------#
 riverctl map "$mode" Super E spawn "nautilus"
+################################################################################
 done
 ################################################################################
 #                                     Tags                                     #
@@ -199,6 +197,14 @@ do
 	riverctl map normal Super+Control $i toggle-focused-tags $tags
 	riverctl map normal Super+Shift+Control $i toggle-view-tags $tags
 done
+################################################################################
+#                                  Scratchpad                                  #
+################################################################################
+#riverctl map normal Super+Shift S spawn \
+#  "riverctl toggle-focused-tags $((1 << 10)) && \
+#   riverctl focus-output next && \
+#   riverctl toggle-focused-tags $((1 << 10)) && \
+#   riverctl focus-output previous"
 ################################################################################
 #                                  Appearance                                  #
 ################################################################################
