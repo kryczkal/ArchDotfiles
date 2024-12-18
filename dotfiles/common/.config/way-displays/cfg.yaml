@@ -32,7 +32,7 @@ AUTO_SCALE: FALSE
 
 # Set an allowed range for auto scale.
 AUTO_SCALE_MIN: 1.0
-#AUTO_SCALE_MAX: 2.0
+AUTO_SCALE_MAX: 2.0
 
 # Auto scale may be overridden for each display.
 SCALE:
