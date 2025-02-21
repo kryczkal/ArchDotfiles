@@ -16,7 +16,7 @@ config.setup = {
   },
   view = {
     adaptive_size = false,
-    side = "left",
+    side = "right",
     preserve_window_proportions = true,
   },
   git = {
