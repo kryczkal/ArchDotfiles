@@ -1,5 +1,5 @@
 #!/bin/bash
-paru -S --noconfirm rofi-lbonn-wayland-git
+paru -S --noconfirm rofi-wayland
 
 echo "Do you also want to install an icon theme? (recommended) (yes/no)"
 read answer
