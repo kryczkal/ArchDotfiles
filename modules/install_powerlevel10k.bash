@@ -12,8 +12,8 @@ cd "$HOME/installed-packages" || print_error_message_and_exit "Cannot change dir
 git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k"
 cd - > /dev/null
 
-local ZSHRC_FILE="$HOME/.zshrc"
-local NEW_THEME="powerlevel10k/powerlevel10k"
+ZSHRC_FILE="$HOME/.zshrc"
+NEW_THEME="powerlevel10k/powerlevel10k"
 try_backup_file "$ZSHRC_FILE"
 sed -i "/^ZSH_THEME=/c\ZSH_THEME=\"$NEW_THEME\"" "$ZSHRC_FILE"
 
