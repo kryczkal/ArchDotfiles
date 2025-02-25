@@ -1,11 +1,17 @@
 #!/usr/bin/env bash
 # Add useful aliases to shell configuration files.
+# MODULE_DEPENDENCIES: install_rust_cli_utilities
 set -euo pipefail
 IFS=$'\n\t'
 
 source "$(dirname "$0")/../lib/utils.bash"
 
-aliases=('alias .="$TERM --working-directory=$(pwd) & disown"')
+aliases=(
+  'alias .="$TERM --working-directory=$(pwd) & disown"'
+  'alias ls="lsd"'
+  'alias l="lsd -lah"'
+  'alias cat="bat"'
+)
 files=("$HOME/.bashrc" "$HOME/.zshrc")
 
 for alias in "${aliases[@]}"; do
