@@ -8,16 +8,18 @@ source "$(dirname "$0")/../lib/utils.bash"
 print_message "Installing necessary base-devel group, git, and cargo..."
 sudo pacman -S --noconfirm --needed base-devel git cargo
 
-print_message "Creating temporary directory for building packages..."
-mkdir -p "$HOME/temporary-files"
-cd "$HOME/temporary-files" || print_error_message_and_exit "Cannot change directory."
+temp_dir=$(mktemp -d -t paru_install.XXXXXX)
+print_message "Using temporary directory: $temp_dir"
+cd "$temp_dir" || print_error_message_and_exit "Cannot change directory to $temp_dir"
 
 print_message "Cloning paru from AUR..."
 git clone https://aur.archlinux.org/paru-git.git
 
-cd paru-git || print_error_message_and_exit "Cannot enter paru-git directory."
+cd paru-git || print_error_message_and_exit "Cannot enter paru-git directory"
 print_message "Building and installing paru..."
 makepkg -si --noconfirm
+
+rm -rf "$temp_dir"
 
 cd "$HOME" || exit
 print_message "Paru installation complete."
@@ -51,7 +53,7 @@ else
     echo "Skipping BottomUp queries configuration."
 fi
 
-if prompt_yes_no "Do you want colored paru output?"; then
+if prompt_yes_no "Do you want to set up a useful alias for paru?"; then
     ALIAS="alias paru='paru --color=always'"
     print_message "Adding alias: $ALIAS"
     append_line_to_file_if_not_exists "$ALIAS" "$HOME/.bashrc"
