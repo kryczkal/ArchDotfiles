@@ -53,7 +53,7 @@ else
     echo "Skipping BottomUp queries configuration."
 fi
 
-if prompt_yes_no "Do you want to set up a useful alias for paru?"; then
+if prompt_yes_no "Do you want to enable colored output for paru?"; then
     ALIAS="alias paru='paru --color=always'"
     print_message "Adding alias: $ALIAS"
     append_line_to_file_if_not_exists "$ALIAS" "$HOME/.bashrc"
