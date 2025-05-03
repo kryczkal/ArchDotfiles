@@ -1,1 +1,1 @@
-timeout 40 'waylock -fork-on-lock -init-color 0x000000 -ignore-empty-password'
+timeout 400 'waylock -fork-on-lock -init-color 0x000000 -ignore-empty-password'
