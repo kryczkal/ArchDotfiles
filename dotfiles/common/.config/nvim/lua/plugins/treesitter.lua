@@ -1,28 +1,23 @@
 return {
-  {
-    "nvim-treesitter/nvim-treesitter",
-    run = ":TSUpdate",
-    config = function()
-      require 'nvim-treesitter.configs'.setup(
-      {
-        auto_install = true,
-        highlight = {
-          enable = true,
-        },
-        incremental_selection = {
-          enable = true,
-          keymaps = {
-            init_selection = "gnn", -- set to `false` to disable one of the mappings
-            node_incremental = "grn",
-            scope_incremental = "grc",
-            node_decremental = "grm",
-          },
-          indent = {
-            enable = true
-          }
-        },
-      }
-      )
-    end
-  }
+  "nvim-treesitter/nvim-treesitter",
+  build = ":TSUpdate", 
+  event = { "BufReadPost", "BufNewFile" }, -- Load when a file is read or a new one is created
+  opts = {
+    auto_install = true, -- Automatically install new parsers
+    highlight = {
+      enable = true,
+    },
+    indent = {
+      enable = true,
+    },
+    incremental_selection = {
+      enable = true,
+      keymaps = {
+        init_selection = "gnn",    -- Start selection
+        node_incremental = "grn",  -- Increment selection to parent node
+        scope_incremental = "grc", -- Increment selection to scope
+        node_decremental = "grm",  -- Decrement selection
+      },
+    },
+  },
 }

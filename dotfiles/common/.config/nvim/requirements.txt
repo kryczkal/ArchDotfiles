@@ -1,9 +1,6 @@
-go
-ripgrep
-wget
 git
+gcc
+make
 unzip
 gzip
-npm
-nodejs
-ascii-image-converter
+tar
