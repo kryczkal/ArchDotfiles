@@ -12,7 +12,7 @@ return {
     opts = {
       ensure_installed = {
         "clangd", "terraformls", "gopls", "pyright",
-        "bashls", "dartls", "lua_ls",
+        "bashls", "lua_ls",
       },
       automatic_installation = true,
       handlers = {
@@ -38,7 +38,7 @@ return {
 
           local opts = { capabilities = caps, on_attach = on_attach }
 
-          if server == "lua_ls" then  
+          if server == "lua_ls" then
             opts.settings = {
               Lua = { diagnostics = { globals = { "vim" } },
                       workspace   = { checkThirdParty = false } }

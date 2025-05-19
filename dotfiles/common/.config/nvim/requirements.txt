@@ -4,3 +4,4 @@ make
 unzip
 gzip
 tar
+shellcheck
