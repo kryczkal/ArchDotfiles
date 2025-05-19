@@ -7,6 +7,6 @@ IFS=$'\n\t'
 source "$(dirname "$0")/../lib/utils.bash"
 
 print_message "Installing fontconfig and fonts..."
-paru -S --noconfirm fontconfig apple-fonts ttf-meslo-nerd noto-fonts noto-fonts-cjk
+paru -S --noconfirm fontconfig apple-fonts ttf-meslo-nerd noto-fonts noto-fonts-cjk noto-fonts-emoji
 fc-cache -f
 print_message "Fonts installed and cache updated."
