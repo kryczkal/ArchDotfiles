@@ -1,3 +1,6 @@
+-- Global toggle for Copilot (set to false to disable all Copilot sources)
+vim.g.copilot_enabled = true
+
 -- Disable netrw for nvim-tree for a cleaner experience
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
