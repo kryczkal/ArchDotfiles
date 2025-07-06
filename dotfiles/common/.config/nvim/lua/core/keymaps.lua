@@ -17,6 +17,14 @@ map("n", "<leader>q", ":q<CR>",
 map("n", "<leader>fe", ":NvimTreeToggle<CR>",
     vim.tbl_extend("keep", { desc = "Toggle NvimTree" }, opts))
 
+-- Telescope
+map("n", "<leader>ff", function() require("telescope.builtin").find_files() end,
+    vim.tbl_extend("keep", { desc = "Find files" }, opts))
+map("n", "<leader>fg", function() require("telescope.builtin").live_grep() end,
+    vim.tbl_extend("keep", { desc = "Live grep" }, opts))
+map("n", "<leader>fb", function() require("telescope.builtin").buffers() end,
+    vim.tbl_extend("keep", { desc = "Find buffers" }, opts))
+
 -- WhichKey
 map("n", "<leader>wk", ":WhichKey<CR>",
     vim.tbl_extend("keep", { desc = "Which-Key" }, opts))
@@ -32,6 +40,20 @@ map("n", "<leader>gts", function() require("utils.gen_titles").GenerateSubtitle(
     vim.tbl_extend("keep", { desc = "Generate subtitle" }, opts))
 map("n", "<leader>gtl", function() require("utils.gen_titles").GenerateOneLiner() end,
     vim.tbl_extend("keep", { desc = "Generate one-liner title" }, opts))
+
+-- CMake Tools
+map("n", "<leader>cg", function() require("cmake-tools").generate() end,
+    vim.tbl_extend("keep", { desc = "CMake: Generate" }, opts))
+map("n", "<leader>cb", function() require("cmake-tools").build() end,
+    vim.tbl_extend("keep", { desc = "CMake: Build" }, opts))
+map("n", "<leader>cr", function() require("cmake-tools").run() end,
+    vim.tbl_extend("keep", { desc = "CMake: Run" }, opts))
+map("n", "<leader>ct", function() require("cmake-tools").test() end,
+    vim.tbl_extend("keep", { desc = "CMake: Test" }, opts))
+map("n", "<leader>cd", function() require("cmake-tools").debug() end,
+    vim.tbl_extend("keep", { desc = "CMake: Debug" }, opts))
+map("n", "<leader>cs", function() require("cmake-tools").select_target() end,
+    vim.tbl_extend("keep", { desc = "CMake: Select Target" }, opts))
 
 -- DAP shortcuts
 map("n", "<F5>",  function() require("dap").continue()      end,

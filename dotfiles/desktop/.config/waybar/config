@@ -4,13 +4,10 @@
     // -------------------------------------------------------------------------
     "layer": "top",
         "modules-left": [
-            "river/mode", 
             "cpu", 
             "memory", 
-            "river/tags"
         ],
         "modules-center": [
-        "river/window"
         ],
         "modules-right": [
         "pulseaudio",
@@ -81,5 +78,15 @@
         "clock": {
             "format": "{:%H:%M}",
             "format-alt": "{:%A, %B %d, %Y (%R)}",
-        }
+        },
+
+        "wlr/workspaces": {
+            "format": "{name}",
+            "format-focused": "{name}",
+            "format-urgent": "{name}",
+            "format-empty": "{name}",
+            "max-length": 20,
+            "on-click": "riverctl workspace {name}",
+            "on-click-right": "riverctl workspace {name} move",
+        },
 }

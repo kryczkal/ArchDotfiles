@@ -12,7 +12,7 @@ return {
     opts = {
       ensure_installed = {
         "clangd", "terraformls", "gopls", "pyright",
-        "bashls", "lua_ls",
+        "bashls", "lua_ls", "cmakels",
       },
       automatic_installation = true,
       handlers = {
@@ -29,7 +29,7 @@ return {
             map("gD",  vim.lsp.buf.declaration,       "Goto declaration")
             map("gr",  vim.lsp.buf.references,        "Goto references")
             map("gI",  vim.lsp.buf.implementation,    "Goto implementation")
-            map("K",   vim.lsp.buf.hover,             "Hover docs")
+            map("<leader>hd",   vim.lsp.buf.hover,             "Hover docs")
             map("[d",  vim.diagnostic.goto_prev,      "Prev diagnostic")
             map("]d",  vim.diagnostic.goto_next,      "Next diagnostic")
             map("<leader>rn", vim.lsp.buf.rename,     "Rename symbol")
@@ -82,4 +82,3 @@ return {
     },
   },
 }
-
