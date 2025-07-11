@@ -3,7 +3,7 @@ return {
 {
     "zbirenbaum/copilot.lua",
     cmd   = "Copilot",
-    event = "InsertEnter",
+    event = "VeryLazy",
     opts  = {
       suggestion = {
         enabled      = true,
@@ -39,6 +39,7 @@ return {
       "hrsh7th/cmp-buffer",
       "hrsh7th/cmp-path",
       "onsails/lspkind-nvim",
+      "neovim/nvim-lspconfig",
     },
     config = function()
       -- Load and configure LuaSnip
