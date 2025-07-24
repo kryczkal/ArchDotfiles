@@ -3,20 +3,7 @@ local autocmd = vim.api.nvim_create_autocmd
 
 -- Define a general autocommand group
 local general_augroup = augroup("MyGeneralAutocmds", { clear = true })
-
--- Terminal settings
-autocmd("TermOpen", {
-  group = general_augroup,
-  pattern = "*",
-  callback = function()
-    vim.opt_local.number = false
-    vim.opt_local.relativenumber = false
-    vim.cmd("startinsert")
-    -- Map Escape to exit terminal mode
-    -- Using tmap as tnoremap in Lua autocommand callback is tricky, vim.keymap.set is better
-    vim.keymap.set('t', '<Esc>', '<C-\\><C-n>', { buffer = true, noremap = true, silent = true })
-  end,
-})
+local contextual_augroup = augroup("MyContextualAutocmds", { clear = true })
 
 -- Filetype recognition
 autocmd({ "BufRead", "BufNewFile" }, {
@@ -29,7 +16,7 @@ autocmd({ "BufRead", "BufNewFile" }, {
 
 autocmd({ "BufRead", "BufNewFile" }, {
   group = general_augroup,
-  pattern = "*.tpp",
+  pattern = { "*.tpp", "*.hpp", "*.hxx" },
   callback = function()
     vim.bo.filetype = "cpp"
   end,
@@ -41,5 +28,18 @@ autocmd("TextYankPost", {
   pattern = "*",
   callback = function()
     vim.highlight.on_yank({ higroup = "IncSearch", timeout = 300 })
+  end,
+})
+
+-- Contextual Triggers (e.g., for project-specific keymaps)
+autocmd({ "VimEnter", "BufEnter" }, {
+  group = contextual_augroup,
+  pattern = "*",
+  callback = function()
+    -- Check for CMake project and attach keymaps if found
+    local project = require("utils.project")
+    if project.find_root("CMakeLists.txt") then
+      require("core.keymaps").setup_cmake_keymaps()
+    end
   end,
 })

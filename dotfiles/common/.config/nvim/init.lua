@@ -11,6 +11,6 @@ vim.g.maplocalleader = "\\"
 
 -- Load core configuration modules
 require("core.options")
-require("core.keymaps")
 require("core.autocmds")
 require("core.lazy") -- This will setup and load all plugins
+require("core.keymaps")

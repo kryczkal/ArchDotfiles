@@ -5,3 +5,9 @@ unzip
 gzip
 tar
 shellcheck
+fzf
+nodejs
+ripgrep
+codelldb-bin
+pyright
+npm

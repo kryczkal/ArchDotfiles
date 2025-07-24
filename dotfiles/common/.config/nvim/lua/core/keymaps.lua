@@ -1,70 +1,99 @@
-local map  = vim.keymap.set
-local opts = { noremap = true, silent = true }
+local M = {}
+local keymap_helpers = require("utils.keymap_helpers")
 
--- Utility modules
-require("utils.toggle_terminal")
-require("utils.gen_titles")
+-- Flags to ensure context-aware keymaps are only registered once.
+local cmake_keys_registered = false
 
--- Clipboard
-map({ "n", "v" }, "<leader>y", '"+y',
-    vim.tbl_extend("keep", { desc = "Yank to system clipboard" }, opts))
+keymap_helpers.register({
+  f = {
+    name = "+File",
+    e = { ":NvimTreeToggle<CR>", "Toggle File Explorer" },
+    f = { function() require("telescope.builtin").find_files() end, "Find File" },
+    g = { function() require("telescope.builtin").live_grep() end, "Live Grep" },
+    b = { function() require("telescope.builtin").buffers() end, "Find Buffer" },
+  },
+  q = { ":q<CR>", "Quit" },
+  y = { '"+y', "Yank to system clipboard", mode = { "n", "v" } },
+  w = {
+    k = { ":WhichKey<CR>", "Which-Key" },
+  },
+  u = {
+    name = "+Utils",
+    t = {
+      name = "+Title",
+      b = { function() require("utils.gen_titles").GenerateTitle() end, "Generate title (big)" },
+      s = { function() require("utils.gen_titles").GenerateSubtitle() end, "Generate subtitle" },
+      l = { function() require("utils.gen_titles").GenerateOneLiner() end, "Generate one-liner title" },
+    },
+  },
+  t = {
+    name = "+Toggle",
+    d = {
+      name = "+Trouble Diagnostics",
+      t = { "<cmd>Trouble diagnostics toggle<cr>", "Toggle Diagnostics" },
+      b = { "<cmd>Trouble diagnostics toggle filter.buf=0<cr>", "Buffer Diagnostics" },
+    },
+    s = { 
+      name = "+Trouble Symbols",
+      t = { "<cmd>Trouble symbols toggle<cr>", "Toggle Symbols" },
+      b = { "<cmd>Trouble symbols toggle filter.buf=0<cr>", "Buffer Symbols" },
+    },
+    l = {
+      name = "+LSP",
+      d = { "<cmd>Trouble lsp toggle focus=false win.position=right<cr>", "Definitions / References" },
+      l = { "<cmd>Trouble loclist toggle<cr>", "Location List" },
+    },
+    q = {
+      name = "+Quickfix",
+      l = { "<cmd>Trouble qflist toggle<cr>", "Quickfix List" },
+    },
+  },
+}, { prefix = "<leader>" })
 
--- Quit
-map("n", "<leader>q", ":q<CR>",
-    vim.tbl_extend("keep", { desc = "Quit window" }, opts))
+-- Function to set up buffer-local LSP keymaps
+function M.setup_lsp_keymaps(bufnr)
+  local lsp_keymaps = {
+    g = {
+      name = "Goto",
+      d = { vim.lsp.buf.definition, "Goto Definition" },
+      D = { vim.lsp.buf.declaration, "Goto Declaration" },
+      r = { vim.lsp.buf.references, "Goto References" },
+      I = { vim.lsp.buf.implementation, "Goto Implementation" },
+    },
+    c = {
+      name = "Code",
+      s = { vim.lsp.buf.signature_help, "Signature Help" },
+      h = { vim.lsp.buf.hover, "Hover Docs" },
+      a = { vim.lsp.buf.code_action, "Action" },
+      r = {{ vim.lsp.buf.rename, "Rename" }, mode = { "n", "v" }},
+    },
+  }
 
--- NvimTree
-map("n", "<leader>fe", ":NvimTreeToggle<CR>",
-    vim.tbl_extend("keep", { desc = "Toggle NvimTree" }, opts))
+  local diagnostics_keymaps = {
+    ['['] = { d = { vim.diagnostic.goto_prev, "Previous Diagnostic" } },
+    [']'] = { d = { vim.diagnostic.goto_next, "Next Diagnostic" } },
+  }
 
--- Telescope
-map("n", "<leader>ff", function() require("telescope.builtin").find_files() end,
-    vim.tbl_extend("keep", { desc = "Find files" }, opts))
-map("n", "<leader>fg", function() require("telescope.builtin").live_grep() end,
-    vim.tbl_extend("keep", { desc = "Live grep" }, opts))
-map("n", "<leader>fb", function() require("telescope.builtin").buffers() end,
-    vim.tbl_extend("keep", { desc = "Find buffers" }, opts))
+  keymap_helpers.register(lsp_keymaps, { prefix = "<leader>", buffer = bufnr })
+  keymap_helpers.register(diagnostics_keymaps, { buffer = bufnr })
+end
 
--- WhichKey
-map("n", "<leader>wk", ":WhichKey<CR>",
-    vim.tbl_extend("keep", { desc = "Which-Key" }, opts))
+-- Function to set up context-aware CMake keymaps.
+function M.setup_cmake_keymaps()
+  if cmake_keys_registered then return end
+  
+  keymap_helpers.register({
+    p = {
+      name = "+Project",
+      g = { "<cmd>CMakeGenerate<cr>", "Generate" },
+      b = { "<cmd>CMakeBuild<cr>", "Build" },
+      r = { "<cmd>CMakeRun<cr>", "Run" },
+      d = { "<cmd>CMakeDebug<cr>", "Debug" },
+      s = { "<cmd>CMakeSelectTarget<cr>", "Select Target" },
+    },
+  }, { prefix = "<leader>" })
 
--- Bottom terminal
-map("n", "<leader>bt", function() ToggleBottomTerminal() end,
-    vim.tbl_extend("keep", { desc = "Toggle bottom terminal" }, opts))
+  cmake_keys_registered = true
+end
 
--- Title helpers
-map("n", "<leader>gtb", function() require("utils.gen_titles").GenerateTitle() end,
-    vim.tbl_extend("keep", { desc = "Generate title (big)" }, opts))
-map("n", "<leader>gts", function() require("utils.gen_titles").GenerateSubtitle() end,
-    vim.tbl_extend("keep", { desc = "Generate subtitle" }, opts))
-map("n", "<leader>gtl", function() require("utils.gen_titles").GenerateOneLiner() end,
-    vim.tbl_extend("keep", { desc = "Generate one-liner title" }, opts))
-
--- CMake Tools
-map("n", "<leader>cg", function() require("cmake-tools").generate() end,
-    vim.tbl_extend("keep", { desc = "CMake: Generate" }, opts))
-map("n", "<leader>cb", function() require("cmake-tools").build() end,
-    vim.tbl_extend("keep", { desc = "CMake: Build" }, opts))
-map("n", "<leader>cr", function() require("cmake-tools").run() end,
-    vim.tbl_extend("keep", { desc = "CMake: Run" }, opts))
-map("n", "<leader>ct", function() require("cmake-tools").test() end,
-    vim.tbl_extend("keep", { desc = "CMake: Test" }, opts))
-map("n", "<leader>cd", function() require("cmake-tools").debug() end,
-    vim.tbl_extend("keep", { desc = "CMake: Debug" }, opts))
-map("n", "<leader>cs", function() require("cmake-tools").select_target() end,
-    vim.tbl_extend("keep", { desc = "CMake: Select Target" }, opts))
-
--- DAP shortcuts
-map("n", "<F5>",  function() require("dap").continue()      end,
-    vim.tbl_extend("keep", { desc = "Debug: Start/Continue" }, opts))
-map("n", "<F10>", function() require("dap").step_over()     end,
-    vim.tbl_extend("keep", { desc = "Debug: Step Over" }, opts))
-map("n", "<F11>", function() require("dap").step_into()     end,
-    vim.tbl_extend("keep", { desc = "Debug: Step Into" }, opts))
-map("n", "<F12>", function() require("dap").step_out()      end,
-    vim.tbl_extend("keep", { desc = "Debug: Step Out" }, opts))
-map("n", "<leader>db", function() require("dap").toggle_breakpoint() end,
-    vim.tbl_extend("keep", { desc = "Debug: Toggle Breakpoint" }, opts))
-map("n", "<leader>du", function() require("dapui").toggle() end,
-    vim.tbl_extend("keep", { desc = "Debug: Toggle UI" }, opts))
+return M

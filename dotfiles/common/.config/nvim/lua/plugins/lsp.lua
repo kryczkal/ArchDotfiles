@@ -8,12 +8,12 @@ return {
   -- Mason ↔ LSP bridge
   {
     "williamboman/mason-lspconfig.nvim",
-    odependencies = {
+    dependencies = {
       "williamboman/mason.nvim",
       "hrsh7th/cmp-nvim-lsp",
       { "neovim/nvim-lspconfig", event = { "BufReadPre", "BufNewFile" } },
     },
-    pts = {
+    opts = {
       ensure_installed = {
         "clangd", "terraformls", "gopls", "pyright",
         "bashls", "lua_ls", "cmakels",
@@ -21,26 +21,12 @@ return {
       automatic_installation = true,
       handlers = {
         function(server)
-          local caps = require("cmp_nvim_lsp")
-                         .default_capabilities(vim.lsp.protocol.make_client_capabilities())
+          local lsp_helpers = require("utils.lsp_helpers")
 
-          local function on_attach(_, bufnr)
-            local map = function(keys, fn, desc)
-              vim.keymap.set("n", keys, fn,
-                { buffer = bufnr, desc = "LSP: " .. desc, noremap = true, silent = true })
-            end
-            map("gd",  vim.lsp.buf.definition,        "Goto definition")
-            map("gD",  vim.lsp.buf.declaration,       "Goto declaration")
-            map("gr",  vim.lsp.buf.references,        "Goto references")
-            map("gI",  vim.lsp.buf.implementation,    "Goto implementation")
-            map("<leader>hd",   vim.lsp.buf.hover,             "Hover docs")
-            map("[d",  vim.diagnostic.goto_prev,      "Prev diagnostic")
-            map("]d",  vim.diagnostic.goto_next,      "Next diagnostic")
-            map("<leader>rn", vim.lsp.buf.rename,     "Rename symbol")
-            map("<leader>ca", vim.lsp.buf.code_action,"Code action")
-          end
-
-          local opts = { capabilities = caps, on_attach = on_attach }
+          local opts = {
+            capabilities = lsp_helpers.capabilities,
+            on_attach = lsp_helpers.on_attach,
+          }
 
           if server == "lua_ls" then
             opts.settings = {
