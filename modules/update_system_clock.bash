@@ -7,12 +7,11 @@ source "$(dirname "$0")/../lib/utils.bash"
 
 # Must be run as root.
 if [ "$(id -u)" -ne 0 ]; then
-  print_error_message_and_exit "This script must be run as root."
+	print_error_message_and_exit "This script must be run as root."
 fi
 
-
 if [ $# -eq 0 ]; then
-  print_error_message_and_exit "Usage: $0 <Region/City>"
+	print_error_message_and_exit "Usage: $0 <Region/City>"
 fi
 
 timezone="$1"

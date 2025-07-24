@@ -5,8 +5,8 @@ IFS=$'\n\t'
 
 # Must be run as root.
 if [ "$(id -u)" -ne 0 ]; then
-  echo "This script must be run as root." >&2
-  exit 1
+	echo "This script must be run as root." >&2
+	exit 1
 fi
 
 source "$(dirname "$0")/../lib/utils.bash"
@@ -39,7 +39,7 @@ new_locale=$(locale | grep LANG)
 echo "New Locale: $new_locale"
 
 if [[ $new_locale == *"en_US.UTF-8"* ]]; then
-  print_message "Locale successfully set to en_US.UTF-8"
+	print_message "Locale successfully set to en_US.UTF-8"
 else
-  print_error_message_and_exit "Failed to set locale to en_US.UTF-8"
+	print_error_message_and_exit "Failed to set locale to en_US.UTF-8"
 fi

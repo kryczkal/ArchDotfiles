@@ -10,7 +10,7 @@ print_message "Installing powerlevel10k..."
 mkdir -p "$HOME/installed-packages"
 cd "$HOME/installed-packages" || print_error_message_and_exit "Cannot change directory."
 git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k"
-cd - > /dev/null
+cd - >/dev/null
 
 ZSHRC_FILE="$HOME/.zshrc"
 NEW_THEME="powerlevel10k/powerlevel10k"
