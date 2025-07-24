@@ -49,7 +49,6 @@ autocmd("LspAttach", {
 	group = contextual_augroup,
 	pattern = "*",
 	callback = function(args)
-		local lsp_helpers = require("utils.lsp_helpers")
-		lsp_helpers.on_attach(args.client, args.buf)
+		require("core.keymaps").setup_lsp_keymaps(args.buf)
 	end,
 })
