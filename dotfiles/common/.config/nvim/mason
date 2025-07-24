@@ -1,0 +1,17 @@
+    ◍ bash-language-server bashls
+    ◍ black
+    ◍ clang-format
+    ◍ clangd
+    ◍ codelldb
+    ◍ commitlint
+    ◍ goimports
+    ◍ gopls
+    ◍ isort
+    ◍ lua-language-server lua_ls
+    ◍ markdownlint
+    ◍ pylint
+    ◍ pyright
+    ◍ ruff
+    ◍ shellcheck
+    ◍ terraform-ls terraformls
+

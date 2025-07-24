@@ -11,3 +11,11 @@ ripgrep
 codelldb-bin
 pyright
 npm
+terraform
+markdownlint-cli2
+commitlint
+clang
+python-pylint
+python-black
+python-isort:w
+
