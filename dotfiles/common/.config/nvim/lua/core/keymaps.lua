@@ -4,6 +4,9 @@ local keymap_helpers = require("utils.keymap_helpers")
 -- Flags to ensure context-aware keymaps are only registered once.
 local cmake_keys_registered = false
 
+-- Copilot flag
+local copilot_toggled = false
+
 keymap_helpers.register({
 	f = {
 		name = "+File",
@@ -26,6 +29,12 @@ keymap_helpers.register({
 			end,
 			"Find Buffer",
 		},
+    r = {
+      function()
+        require("spectre").open_visual({select_word = true})
+      end,
+      "Replace in Files (Visual Selection)",
+    },
 	},
 	q = { ":q<CR>", "Quit" },
 	y = { '"+y', "Yank to system clipboard", mode = { "n", "v" } },
@@ -77,6 +86,23 @@ keymap_helpers.register({
 			name = "+Quickfix",
 			l = { "<cmd>Trouble qflist toggle<cr>", "Quickfix List" },
 		},
+    r = {
+      function ()
+        require("spectre").toggle()
+      end,
+      "Toggle Replace Window",
+    },
+    c = {
+      function ()
+        if copilot_toggled then
+          vim.cmd("Copilot enable")
+        else
+          vim.cmd("Copilot disable")
+        end
+        copilot_toggled = not copilot_toggled
+      end,
+      "Toggle Copilot",
+    }
 	},
 }, { prefix = "<leader>" })
 

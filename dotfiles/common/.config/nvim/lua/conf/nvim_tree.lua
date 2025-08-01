@@ -2,6 +2,7 @@ return {
 	hijack_cursor = true,
 	view = {
 		side = "right",
+    adaptive_size = true,
 		preserve_window_proportions = true,
 	},
 	renderer = {
