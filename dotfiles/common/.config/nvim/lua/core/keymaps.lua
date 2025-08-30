@@ -31,9 +31,15 @@ keymap_helpers.register({
 		},
 		r = {
 			function()
-				require("spectre").open_visual({ select_word = true })
+				if vim.fn.mode():find("[vV]") then
+					vim.cmd("normal! \\<esc>")
+					require("spectre").open_visual()
+				else
+					require("spectre").open_visual({ select_word = true })
+				end
 			end,
 			"Replace in Files (Visual Selection)",
+			mode = { "n", "v" },
 		},
 	},
 	q = { ":q<CR>", "Quit" },
