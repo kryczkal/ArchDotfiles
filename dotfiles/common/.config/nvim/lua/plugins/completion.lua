@@ -109,14 +109,14 @@ return {
 							fallback()
 						end
 					end, { "i", "s" }),
-            ["<CR>"] = cmp.mapping(function(fallback)
+					["<CR>"] = cmp.mapping(function(fallback)
 						if cmp.visible() and cmp.get_selected_entry() then
 							cmp.confirm({ select = true })
 						else
 							fallback()
 						end
-            end, { "i", "s" }),
-            ["<C-e>"] = cmp.mapping.abort(),
+					end, { "i", "s" }),
+					["<C-e>"] = cmp.mapping.abort(),
 				}),
 				sources = cmp.config.sources({
 					{ name = "copilot", max_item_count = 2, group_index = 0 },

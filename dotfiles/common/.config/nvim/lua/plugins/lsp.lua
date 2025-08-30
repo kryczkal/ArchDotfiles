@@ -24,8 +24,9 @@ return {
 				"bashls",
 				"lua_ls",
 			},
-      handlers = {
-        require("core.lsp_configs").setup,}
+			handlers = {
+				require("core.lsp_configs").setup,
+			},
 		},
 	},
 
