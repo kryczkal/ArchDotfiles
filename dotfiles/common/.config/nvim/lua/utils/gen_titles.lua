@@ -1,6 +1,6 @@
 local gen_titles = {}
 
-function gen_titles.GenerateTitle()
+function gen_titles.GenerateBlockTitle()
 	local comment_char = vim.fn.input("Enter the comment character: ")
 	if comment_char == "" then
 		return
@@ -10,62 +10,27 @@ function gen_titles.GenerateTitle()
 		return
 	end
 
-	local total_width = 80
-	local border_str = string.rep(comment_char, total_width)
-	local text_length = string.len(title)
-
-	-- Ensure padding is not negative
-	local padding_total = total_width - text_length - 4 -- for "# " and " #"
-	if padding_total < 0 then
-		padding_total = 0
+	local border_char = vim.fn.input("Enter the border character [=]: ", "=")
+	if border_char == "" then
+		border_char = "="
 	end
 
-	local padding_side = math.floor(padding_total / 2)
-	local padding = string.rep(" ", padding_side)
-
-	local right_padding = padding
-	if padding_total % 2 ~= 0 then
-		right_padding = padding .. " "
+	local total_width_str = vim.fn.input("Enter the total width [80]: ", "80")
+	local total_width = tonumber(total_width_str) or 80
+	if total_width <= 0 then
+		total_width = 80
 	end
 
-	local formatted_title = comment_char .. " " .. padding .. title .. right_padding .. " " .. comment_char
+	local border_fill_len = total_width - string.len(comment_char)
+	if border_fill_len < 0 then
+		border_fill_len = 0
+	end
+	local border_str = comment_char .. string.rep(border_char, border_fill_len)
+
+	local formatted_title = comment_char .. " " .. title
 
 	local current_line = vim.api.nvim_win_get_cursor(0)[1]
 	local lines_to_insert = { border_str, formatted_title, border_str }
-	vim.api.nvim_buf_set_lines(0, current_line - 1, current_line - 1, false, lines_to_insert)
-end
-
-function gen_titles.GenerateSubtitle()
-	local comment_char = vim.fn.input("Enter the comment character: ")
-	if comment_char == "" then
-		return
-	end
-	local subtitle = vim.fn.input("Enter the subtitle text: ")
-	if subtitle == "" then
-		return
-	end
-
-	local total_width = 80
-	local text_length = string.len(subtitle)
-
-	local padding_total = total_width - text_length - 4 -- for "# " and " #"
-	if padding_total < 0 then
-		padding_total = 0
-	end
-
-	local padding_side = math.floor(padding_total / 2)
-	local padding = string.rep(" ", padding_side)
-
-	local right_padding = padding
-	if padding_total % 2 ~= 0 then
-		right_padding = padding .. " "
-	end
-
-	local formatted_subtitle = comment_char .. " " .. padding .. subtitle .. right_padding .. " " .. comment_char
-	local subtitle_border = comment_char .. string.rep("-", total_width - 2) .. comment_char
-
-	local current_line = vim.api.nvim_win_get_cursor(0)[1]
-	local lines_to_insert = { subtitle_border, formatted_subtitle, subtitle_border }
 	vim.api.nvim_buf_set_lines(0, current_line - 1, current_line - 1, false, lines_to_insert)
 end
 
@@ -89,7 +54,6 @@ function gen_titles.GenerateOneLiner()
 	local padding_side = math.floor(padding_total / 2)
 	local left_padding_chars = string.rep(comment_char, padding_side)
 
-	-- Calculate remaining characters for the right side to ensure total_width
 	local right_padding_length = total_width - text_length - string.len(left_padding_chars)
 	if right_padding_length < 0 then
 		right_padding_length = 0

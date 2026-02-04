@@ -15,10 +15,10 @@ o.smartcase = true -- Override ignorecase if pattern contains uppercase letters
 
 -- Tabs & Indentation
 o.expandtab = true -- Use spaces instead of tabs
-o.shiftwidth = 2 -- Number of spaces for autoindent
+o.shiftwidth = 4 -- Number of spaces for autoindent
 o.smartindent = true -- Enable smart autoindenting
-o.tabstop = 2 -- Number of spaces a tab counts for
-o.softtabstop = 2 -- Number of spaces for tab key and backspace
+o.tabstop = 4 -- Number of spaces a tab counts for
+o.softtabstop = 4 -- Number of spaces for tab key and backspace
 
 -- Window Splits and Clipboard
 o.splitbelow = true -- Horizontal splits open below

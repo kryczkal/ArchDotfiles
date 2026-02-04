@@ -6,6 +6,11 @@ local cmake_keys_registered = false
 
 -- Copilot flag
 local copilot_toggled = false
+if copilot_toggled then
+    vim.cmd("Copilot enable")
+else
+    vim.cmd("Copilot disable")
+end
 
 keymap_helpers.register({
 	f = {
@@ -53,15 +58,9 @@ keymap_helpers.register({
 			name = "+Title",
 			b = {
 				function()
-					require("utils.gen_titles").GenerateTitle()
+					require("utils.gen_titles").GenerateBlockTitle()
 				end,
-				"Generate title (big)",
-			},
-			s = {
-				function()
-					require("utils.gen_titles").GenerateSubtitle()
-				end,
-				"Generate subtitle",
+				"Generate Block Title",
 			},
 			l = {
 				function()
