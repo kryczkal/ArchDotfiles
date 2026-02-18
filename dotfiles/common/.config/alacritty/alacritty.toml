@@ -1,5 +1,5 @@
 [window]
-opacity = 0.55
+opacity = 1.0
 
 [colors]
 draw_bold_text_with_bright_colors = false

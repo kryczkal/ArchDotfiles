@@ -12,7 +12,7 @@ help() {
     echo "Usage: $0 [options] [files and/or directories]"
     echo
     echo "Concatenates files. If run with no arguments, it will try to load settings"
-    echo "from a 'concat.conf' file in the current directory."
+    echo "from a '.concat.conf' file in the current directory."
     echo
     echo "Options:"
     echo "  -r, --recursive              Recurse into directories"
@@ -24,7 +24,7 @@ help() {
     echo "  -h, --help                   Show this help message and exit"
     echo
     echo "Examples:"
-    echo "  $0                           # Load settings from ./concat.conf"
+    echo "  $0                           # Load settings from ./.concat.conf"
     echo "  $0 -l -o combined.txt file1.txt dir1"
     echo "  $0 --config project.conf -c  # Load from project.conf and copy to clipboard"
     echo
@@ -64,10 +64,10 @@ parse_args() {
     # Restore remaining arguments
     set -- "${temp_args[@]}"
 
-    # If no arguments were originally passed (and no --config), try to load default ./concat.conf
-    if [[ ${#temp_args[@]} -eq 0 && -f "concat.conf" ]]; then
+    # If no arguments were originally passed (and no --config), try to load default ./.concat.conf
+    if [[ ${#temp_args[@]} -eq 0 && -f ".concat.conf" ]]; then
         # shellcheck source=/dev/null
-        source "concat.conf"
+        source ".concat.conf"
         # No more args to parse, so we can return
         return
     fi
