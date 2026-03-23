@@ -30,7 +30,7 @@ The bootstrap runs modules in phases:
 | `02-shell` | Zsh, Powerlevel10k, Rust CLI tools (bat, lsd, fd, etc.) |
 | `03-desktop` | River WM, Waybar, Rofi, Mako, PipeWire, screenshots, clipboard |
 | `04-gpu` | NVIDIA proprietary or nouveau drivers |
-| `05-apps` | Nautilus, OBS |
+| `05-apps` | Yazi, Nautilus, OBS |
 | `99-finalize` | Stow dotfiles, SSH key, GPG key |
 
 ## Dotfiles (Stow Packages)

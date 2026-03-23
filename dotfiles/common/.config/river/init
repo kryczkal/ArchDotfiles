@@ -31,6 +31,11 @@ else
     echo "Error: Failed to execute dbus-update-activation-environment."
 fi
 
+# Start gnome-keyring-daemon
+# Components: pkcs11 (certificates), secrets (freedesktop secret service), ssh (ssh agent)
+eval $(gnome-keyring-daemon --start --components=pkcs11,secrets,ssh)
+export SSH_AUTH_SOCK
+
 # Check the environment variables in the systemd user environment after the import
 echo "Checking the environment variables in systemctl --user show-environment..."
 systemctl --user show-environment | grep -E 'WAYLAND_DISPLAY|XDG_CURRENT_DESKTOP'
@@ -178,7 +183,7 @@ riverctl map "$mode" Super Tab spawn "rofi -show drun"
 #------------------------------------------------------------------------------#
 #                                 File Manager                                 #
 #------------------------------------------------------------------------------#
-riverctl map "$mode" Super E spawn "nautilus"
+riverctl map "$mode" Super E spawn "alacritty -e yazi"
 ################################################################################
 done
 ################################################################################
