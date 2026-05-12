@@ -27,6 +27,11 @@
 #
 # Spawned claude defaults to --dangerously-skip-permissions.
 # Set CWT_SKIP_PERMS=0 to opt out (e.g. for a more cautious session).
+#
+# Claude Code session sharing: by default the worktree's per-project session
+# dir (~/.claude/projects/<encoded-cwd>) is symlinked to the main worktree's
+# session dir. All worktrees see + resume + fork each other's sessions.
+# Set CWT_SHARE_SESSIONS=0 to opt out (each worktree gets its own dir).
 
 set -euo pipefail
 
@@ -34,10 +39,40 @@ set -euo pipefail
 claude_cmd="claude"
 [[ "${CWT_SKIP_PERMS:-1}" != "0" ]] && claude_cmd="claude --dangerously-skip-permissions"
 
-root()      { git rev-parse --show-toplevel 2>/dev/null || { echo "cwt: not in a git repo" >&2; exit 1; }; }
-repo()      { basename "$(root)"; }
-path_for()  { echo "$(dirname "$(root)")/$(repo).$1"; }
-win_for()   { echo "$(repo).$1"; }
+root()           { git rev-parse --show-toplevel 2>/dev/null || { echo "cwt: not in a git repo" >&2; exit 1; }; }
+repo()           { basename "$(root)"; }
+path_for()       { echo "$(dirname "$(root)")/$(repo).$1"; }
+win_for()        { echo "$(repo).$1"; }
+main_worktree()  { git worktree list | awk 'NR==1{print $1}'; }
+encode_path()    { echo "${1//\//-}"; }
+sessions_dir()   { echo "$HOME/.claude/projects/$(encode_path "$1")"; }
+
+share_sessions() {
+  [[ "${CWT_SHARE_SESSIONS:-1}" == "0" ]] && return 0
+  local wt="$1"
+  local main_dir wt_dir
+  main_dir=$(sessions_dir "$(main_worktree)")
+  wt_dir=$(sessions_dir "$wt")
+
+  mkdir -p "$main_dir"
+
+  if [[ -e "$wt_dir" || -L "$wt_dir" ]]; then
+    if [[ -L "$wt_dir" ]] && [[ "$(readlink -f "$wt_dir")" == "$(readlink -f "$main_dir")" ]]; then
+      return 0
+    fi
+    echo "cwt: $wt_dir exists and is not the expected symlink — session-sharing skipped" >&2
+    return 0
+  fi
+  ln -s "$main_dir" "$wt_dir"
+  echo "cwt: claude sessions symlinked → $main_dir"
+}
+
+unshare_sessions() {
+  local wt="$1"
+  local wt_dir
+  wt_dir=$(sessions_dir "$wt")
+  [[ -L "$wt_dir" ]] && rm "$wt_dir" || true
+}
 
 run_hook() {
   local event="$1" wt="$2" name="$3" branch="$4"
@@ -69,6 +104,7 @@ case "$cmd" in
       echo "cwt: created branch '$branch' from '$base'"
     fi
 
+    share_sessions "$wt"
     run_hook post-new "$wt" "$name" "$branch"
 
     win=$(win_for "$name")
@@ -92,6 +128,7 @@ case "$cmd" in
     branch=$(git -C "$wt" symbolic-ref --short HEAD 2>/dev/null || echo "")
 
     run_hook pre-remove "$wt" "$name" "$branch"
+    unshare_sessions "$wt"
 
     git worktree remove "$wt"
     if [[ -n "${TMUX:-}" ]]; then
