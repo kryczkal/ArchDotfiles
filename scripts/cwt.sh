@@ -32,6 +32,10 @@
 # dir (~/.claude/projects/<encoded-cwd>) is symlinked to the main worktree's
 # session dir. All worktrees see + resume + fork each other's sessions.
 # Set CWT_SHARE_SESSIONS=0 to opt out (each worktree gets its own dir).
+#
+# Per-worktree env vars: if <worktree>/.cwt-state/env exists (KEY=VAL lines),
+# each var is passed into the spawned tmux window via `tmux new-window -e`.
+# Hooks (e.g. webpilot's post-new) write to this file; cwt loads it.
 
 set -euo pipefail
 
@@ -108,10 +112,24 @@ case "$cmd" in
     run_hook post-new "$wt" "$name" "$branch"
 
     win=$(win_for "$name")
+
+    # Collect env vars from <worktree>/.cwt-state/env (written by post-new
+    # hook, e.g. CDP_PORT=9341). Each becomes a tmux -e flag.
+    env_args=()
+    env_file="$wt/.cwt-state/env"
+    if [[ -f "$env_file" ]]; then
+      while IFS= read -r line; do
+        [[ -z "$line" || "$line" =~ ^# ]] && continue
+        env_args+=(-e "$line")
+      done < "$env_file"
+    fi
+
     if [[ -n "${TMUX:-}" ]]; then
-      tmux new-window -n "$win" -c "$wt" "$claude_cmd"
+      tmux new-window -n "$win" -c "$wt" "${env_args[@]}" "$claude_cmd"
     else
-      printf '\nWorktree:  %s\nBranch:    %s\nOpen:      cd %s && %s\n' "$wt" "$branch" "$wt" "$claude_cmd"
+      hint=""
+      [[ ${#env_args[@]} -gt 0 ]] && hint=$(grep -v '^#' "$env_file" 2>/dev/null | xargs -r echo | sed 's/ / /g')" "
+      printf '\nWorktree:  %s\nBranch:    %s\nOpen:      cd %s && %s%s\n' "$wt" "$branch" "$wt" "$hint" "$claude_cmd"
     fi
     ;;
 
