@@ -1,95 +1,146 @@
 ---
 name: brainstorming
-description: "You MUST use this before any creative work - creating features, building components, adding functionality, or modifying behavior. Gathers requirements via Q&A, then writes full spec autonomously."
+description: >
+  Turn ideas into committed spec files. Three phases: (1) constraint-anchored Q&A with
+  devil's-advocate assumptions and cost visibility check, (2) 1-2 approaches shaped by
+  constraints, (3) compressed spec written autonomously. Optimizes for asking FEWER,
+  SHARPER questions — wrong questions produce wrong specs regardless of spec quality.
 ---
 
 # Brainstorming Ideas Into Specs
 
-Turn ideas into committed spec files. Two Q&A rounds with the user, then write the full spec autonomously.
+Turn ideas into committed spec files. The Q&A phase determines everything — wrong questions produce wrong specs regardless of how well the spec is written. Fewer, sharper questions beat many generic ones.
 
 ## Flow
 
 ```
-1. Read context  →  2. Q&A round 1  →  3. User answers  →  4. Q&A round 2 (deeper)  →  5. User answers  →  6. Write full spec  →  7. Commit  →  8. Show user
+1. Read context → 2. Constraints + questions → 3. Devil's advocate → 4. Cost visibility
+→ 5. Approach design (1-2, shaped by constraints) → 6. Write compressed spec → 7. Commit → 8. Show user
 ```
 
-**You are needed by the user for steps 3 and 5.** Everything else runs without waiting.
+**You need the user for steps 2-4.** Everything else runs without waiting.
 
-## Step 1 — Read context
+---
+
+## Phase 1: Read Context
 
 Before asking anything:
-- Check relevant files, docs, recent commits
-- Check `wiki/STATUS.md` and `wiki/DECISIONS.md` if they exist — skip Q&A questions already answered there
-- Assess scope: if the request spans multiple independent subsystems, decompose first (what are the pieces, what order to build?), then brainstorm the first piece
+- Check relevant files, docs, recent commits, wiki
+- Check `wiki/STATUS.md`, `wiki/DECISIONS.md`, `CLAUDE.md` — skip questions already answered
+- Assess scope: if multi-subsystem, decompose first, then brainstorm the first piece
+- Map costs: identify which operations are expensive (LLM calls, external APIs), cheap (local I/O, DB writes), or free (serialization, validation)
 
-## Step 2 — Q&A round 1 (scope & direction)
+---
 
-Ask every question you need to understand **what** the user wants and **why**. Focus on: goals, constraints, users, non-obvious context, what's explicitly out of scope.
+## Phase 2: Q&A (the crux — fewer, sharper questions)
 
-Rules:
+### Step 1 — Constraint identification
+
+Identify 2-3 things that CANNOT change about the system for this feature. For each, state in one sentence:
+- What the constraint is
+- Why it's immovable
+- The ONE design decision it forces
+
+Then ask ONE binary question per constraint — the decision the constraint forces but doesn't resolve. Prefer multiple choice when the option space is enumerable.
+
+Constraints naturally surface the concerns that generic checklists try to catch (dependencies, operational impact, security boundaries) but with specificity. A constraint that says "the parser calls `claude -p` which costs real tokens" is more useful than "what are the cost implications?"
+
+### Step 2 — Devil's advocate assumptions
+
+After constraints, state 2 DELIBERATELY PROVOCATIVE assumptions. These must be:
+- **Specific enough to be wrong in an interesting way** — not "this should be scalable" but "this should use a cheaper model for retries since the first attempt already proved the task is hard"
+- **Designed to surface requirements the user takes for granted** — things so obvious to the user they'd never mention them
+- **Targeting aspects OUTSIDE the constraints** — the constraints already caught the structural stuff; provocative assumptions probe product/UX, cost model, and behavioral expectations
+
+The user's corrections to provocative assumptions are the highest-signal data in the entire brainstorm. They reveal requirements that reasonable questions never surface.
+
+### Step 3 — Cost visibility check
+
+Ask ONE question: **"How does the user know what this feature cost them to use? What should be visible?"**
+
+This catches a systematic blind spot — every brainstorm naturally focuses on what a feature DOES, not on what it COSTS. The answer shapes whether the spec includes observability, metering, or cost feedback.
+
+Skip this step only if the feature has no resource cost (pure refactoring, documentation, etc.).
+
+### Rules for all Q&A
+
 - One topic per question — no compound questions
-- Prefer multiple choice when the option space is enumerable
-- Surface your own assumptions — ask if they're correct
-- Skip anything you can answer from codebase, docs, commits, or wiki
+- Skip anything answerable from codebase, docs, or wiki
+- Every question must change a design decision — if the answer wouldn't change the spec, don't ask
+- Total Q&A should be ~5-8 interactions. More than 10 means questions are too granular.
 
-A long Q&A message is correct. An unanswered question becomes a wrong assumption in the spec.
+---
 
-## Step 3 — User answers round 1
+## Phase 3: Approach Design
 
-Wait. First pause.
+After Q&A, autonomously design the solution. The constraints already narrowed the space.
 
-## Step 4 — Q&A round 2 (deeper / implementation-shaping)
+### If constraints converge to one approach:
 
-Ask about **how**: tradeoffs, edge cases, priorities between competing concerns, integration points, anything that emerged from round 1 answers that needs clarification.
+Design 1 approach that respects all constraints and incorporates corrections from the devil's advocate round. No alternatives needed — the constraint analysis IS the approach exploration. Document why this is the only viable approach.
 
-This round is typically shorter (3-8 questions). Ask only what would change the implementation approach if answered differently.
+### If constraints leave genuine design space:
 
-## Step 5 — User answers round 2
+Design exactly 2 approaches:
+1. **Within constraints** — optimizes within all stated constraints
+2. **Relaxes one** — relaxes the least important constraint for a meaningfully better design
 
-Wait. Second pause.
+For each:
+- **Name:** 2-3 word label
+- **Core idea:** One paragraph
+- **Tradeoff:** What it optimizes vs. what it sacrifices
+- **Effort:** T-shirt size (S/M/L)
 
-## Step 6 — Write full spec autonomously
+Pick the winner. Document which constraint was relaxed (if any) and why that's acceptable.
 
-After the user answers, do all of this **without pausing for approval**:
+### Never 3 approaches
 
-1. **Explore 3 orthogonal approaches.** Design three genuinely different implementation strategies — not variations on a theme, but different architectural bets. For each: one-paragraph description, key tradeoff, what it optimizes for.
+The third approach is always padding. Constraint analysis eliminates it before you design it. If you're reaching for a third, one of your constraints is wrong.
 
-2. **Evolve each approach (1 genetic iteration).** For each of the 3 approaches, spawn a subagent that produces 2-3 mutations (targeted improvements, hybrid with strengths of another approach, or scope reduction). Evaluate all mutations against the user's stated goals and constraints. Each approach's best mutation replaces the original.
+---
 
-3. **Pick the winner.** From the 3 evolved approaches, select the best. Document reasoning for why it wins. Include the runners-up in a "Rejected alternatives" section so the user can redirect if they disagree.
+## Phase 4: Write Compressed Spec
 
-4. **Write the complete spec** covering:
-   - Goal and scope (what's in, what's explicitly out)
-   - Architecture and components
-   - Data flow and interfaces
-   - Error handling
-   - Testing approach
-   - Implementation phases if the work is large
+After approach selection, write the complete spec **without pausing for approval**.
 
-5. **Self-review before committing:**
-   - Any TBD / TODO / vague requirements? Fill them in.
-   - Any internal contradictions? Fix them.
-   - Ambiguous requirements? Pick one interpretation, make it explicit.
-   - Scope too large for one implementation? Decompose.
+### Contents
 
-6. **Commit** the spec to `docs/specs/YYYY-MM-DD-<topic>.md`
-   - (User preference for path overrides this default)
+1. **Goal** — 2 sentences: what this does and what's explicitly out of scope
+2. **Architecture** — diagram showing data flow and component relationships
+3. **Changes** — table of `file | change` pairs, one row per file touched
+4. **Key decisions** — only non-obvious choices: what, why, what else was considered. Skip decisions that trace directly to a constraint (those are already documented).
+5. **Tests** — numbered list of test cases with expected behavior
 
-## Step 7 — Show user
+### Self-review before committing
+
+- Any TBD / TODO / vague requirements? Fill them in.
+- Any internal contradictions? Fix them.
+- Could a cold-start session implement from this spec alone? If not, add context.
+- Does every design decision trace to a constraint, a user correction, or a cost visibility answer? If not, the decision is under-justified.
+- Scope too large? Decompose into phases.
+
+### Commit
+
+Save to `docs/specs/YYYY-MM-DD-<topic>.md` (user preference overrides path).
+
+---
+
+## Phase 5: Show User
 
 One message:
 
 > "Spec written → `docs/specs/YYYY-MM-DD-<topic>.md`. Review and request changes, or say 'implement' to proceed."
 
-If changes requested: update spec, re-run self-review, re-commit, show again.
+If changes: update, re-review, re-commit, show again.
 If approved: implement from spec using TaskCreate for progress tracking.
+
+---
 
 ## Design principles
 
-**YAGNI ruthlessly** — remove anything not required by the stated goal.
-
-**Design for isolation** — if you can't explain a unit without reading its internals, the boundary is wrong.
-
-**Follow existing patterns** — explore codebase before proposing. No unrelated refactoring.
-
-**Spec is the session handoff** — the spec file must be complete enough that an implementation session starting cold can execute it without any context from this conversation.
+- **Constraints over checklists** — a constraint with a forced decision beats a generic "did you think about X?" every time
+- **Provocation over assumption-stating** — provocative assumptions surface hidden requirements; reasonable assumptions get rubber-stamped
+- **The spec is the session handoff** — complete enough for a cold-start implementation session
+- **Cost visibility is not optional** — every feature has a cost model; the spec must address it
+- **YAGNI ruthlessly** — remove anything not required by the stated goal
+- **Compression is quality** — every section, question, and sentence must change a decision; if removing it wouldn't change the spec, remove it
