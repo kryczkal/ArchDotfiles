@@ -36,7 +36,7 @@ Before asking anything:
 
 ## Phase 2: Map Decisions
 
-Before asking ANY questions, map ALL decisions the feature requires. For each decision, classify:
+Before asking ANY questions, map ALL decisions the feature requires. Map from the user's perspective — what does the user see, choose, or experience? System-internal decisions that the user never observes are TECHNICAL by default. For each decision, classify:
 
 - **DESIGN** (must ask user): UX choices, behavior, interaction patterns, data presentation, workflows, error experience, what things should look/feel like, what the user sees. If wrong answer = reimplementation, it's DESIGN.
 - **TECHNICAL** (Claude decides autonomously): Architecture, libraries, data structures, algorithms, protocols, file formats. Present 3 orthogonal options in the spec and pick the best.
@@ -70,7 +70,7 @@ Ask DESIGN decisions one at a time, starting with the highest reimplementation c
 - One topic per question — no compound questions
 - Skip anything answerable from codebase, docs, or wiki
 
-**No cap on interactions.** Ask until ALL design decisions are resolved. The Q&A is extensive when every question targets a potential mind-reading gap. It's too long only if questions are about things the user doesn't care about (those should be TECHNICAL).
+Ask until all DESIGN decisions from the decision map are resolved. When the only remaining questions are ones where Claude would confidently pick the right answer, the Q&A is done — move to Phase 5. Do not invent new DESIGN questions beyond the decision map to extend the conversation. The Q&A is extensive when every question targets a potential mind-reading gap. It's too long only if questions are about things the user doesn't care about (those should be TECHNICAL).
 
 Every question must pass this test: **"Would Claude confidently pick the wrong answer here?"** If yes, ask. If Claude would get it right, don't waste the user's time.
 
@@ -81,7 +81,7 @@ Every question must pass this test: **"Would Claude confidently pick the wrong a
 After all design questions, state 2 DELIBERATELY PROVOCATIVE assumptions. These must be:
 - **Specific enough to be wrong in an interesting way** — not "this should be scalable" but "this should use a cheaper model for retries since the first attempt already proved the task is hard"
 - **Designed to surface requirements the user takes for granted** — things so obvious to the user they'd never mention them
-- **Targeting aspects OUTSIDE the Q&A** — the Q&A already caught the structural stuff; provocative assumptions probe product vision, cost model, and behavioral expectations the user assumed were obvious
+- **Targeting aspects OUTSIDE the Q&A** — "outside" means a different category (product vision, cost model, usage patterns), not a different question within the same design space the Q&A already covered. The Q&A caught the structural stuff; provocative assumptions probe what the user assumed was obvious.
 
 The user's corrections to provocative assumptions are the highest-signal data in the entire brainstorm. They reveal requirements that reasonable questions never surface.
 
@@ -107,7 +107,7 @@ After Q&A, write the complete spec **without pausing for approval**.
 
 ### Approach Selection (autonomous)
 
-Design 3 genuinely orthogonal approaches — different architectural bets, not variations on a theme. For each: one-paragraph description, key tradeoff, what it optimizes. Pick the winner with reasoning. Include rejected alternatives so the user can redirect if they disagree.
+Design 3 genuinely orthogonal approaches — different architectural bets, not variations on a theme. Each approach must optimize for a different user-confirmed design priority from the Phase 4-6 Q&A; if two approaches optimize for the same thing, they aren't orthogonal. For each: one-paragraph description, key tradeoff, what it optimizes. Pick the winner with reasoning. Include rejected alternatives so the user can redirect if they disagree.
 
 ### Spec Contents
 
@@ -128,7 +128,7 @@ Design 3 genuinely orthogonal approaches — different architectural bets, not v
 
 ### Commit
 
-Save to `docs/specs/YYYY-MM-DD-<topic>.md` (user preference overrides path).
+Save to `wiki/specs/YYYY-MM-DD-<topic>.md` (user preference overrides path).
 
 ---
 
@@ -136,7 +136,7 @@ Save to `docs/specs/YYYY-MM-DD-<topic>.md` (user preference overrides path).
 
 One message:
 
-> "Spec written → `docs/specs/YYYY-MM-DD-<topic>.md`. Review and request changes, or say 'implement' to proceed."
+> "Spec written → `wiki/specs/YYYY-MM-DD-<topic>.md`. Review and request changes, or say 'implement' to proceed."
 
 If changes: update, re-review, re-commit, show again.
 If approved: implement from spec using TaskCreate for progress tracking.

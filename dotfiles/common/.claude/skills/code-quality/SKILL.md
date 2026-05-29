@@ -1,6 +1,6 @@
 ---
-name: refactor
-description: Comprehensive code audit and refactoring. Discovers project docs (production guides, testing guides, debuggability guides, etc.), internalizes their standards, then systematically reviews every module against those standards. Top priority task — spot all blemishes and correct them, even if requiring heavy changes.
+name: code-quality
+description: Comprehensive code audit, quality enforcement, and refactoring. Discovers project docs (production guides, testing guides, debuggability guides, etc.), internalizes their standards, then systematically reviews every module against those standards. Top priority task — spot all blemishes and correct them, even if requiring heavy changes.
 argument-hint: [file-or-module (optional)]
 effort: max
 ---
@@ -99,6 +99,10 @@ Systematically review every file. The project's own docs define the bar — appl
 - Untested code paths, weak assertions
 - Missing edge case tests
 - Test code quality
+
+## Clean bill of health
+
+If after systematically reviewing every file no finding emerges that meets the bar — no logic errors, no standards violations, no type gaps, no quality issues — say so directly, name which modules and doc standards you checked against, and stop. A clean result is a valid output; inventing blemishes to fill the task list is not.
 
 ## Phase 3: Execute Changes
 
