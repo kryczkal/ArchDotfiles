@@ -7,6 +7,7 @@ description: >
   Invoke with /evolve-pipeline <skill-name>.
 argument-hint: <skill-name>
 effort: max
+context: fork
 ---
 
 # Evolve Pipeline — Three-Pass Skill Evolution

@@ -6,6 +6,7 @@ description: >
   Invoke with /evolve <skill-name>.
 argument-hint: <skill-name>
 effort: max
+context: fork
 ---
 
 # Evolve

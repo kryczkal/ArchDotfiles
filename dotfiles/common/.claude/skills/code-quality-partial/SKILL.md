@@ -3,6 +3,7 @@ name: code-quality-partial
 description: One slice of the code-quality audit. Picks a single source file at random, audits and fixes it thoroughly, then stops. Designed to be run repeatedly in a loop (e.g. via /loop) so refactors land incrementally over many iterations instead of as one massive change.
 argument-hint: [scope-path (optional)]
 effort: medium
+context: fork
 ---
 
 # Partial Code Audit & Refactoring (Loop-Friendly)

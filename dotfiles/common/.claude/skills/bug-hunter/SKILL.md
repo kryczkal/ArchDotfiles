@@ -8,6 +8,8 @@ description: >
   Add --security for red-team mode (think like an attacker).
 argument-hint: [subsystem or path] [--security]
 effort: max
+context: fork
+agent: Explore
 ---
 
 # Bug Hunter
