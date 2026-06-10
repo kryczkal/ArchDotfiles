@@ -1,7 +1,7 @@
 # Spec: Consolidate dispersed shell/config options under stow
 
 **Date:** 2026-06-10
-**Status:** approved-pending-review
+**Status:** implemented (2026-06-10)
 
 ## 1. Goal
 
