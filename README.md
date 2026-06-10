@@ -37,11 +37,29 @@ The bootstrap runs modules in phases:
 
 Configs are managed with [GNU Stow](https://www.gnu.org/software/stow/). Packages:
 
-- **common** — nvim, tmux, alacritty, river, rofi, lsd, bottom, zed, swayidle
+- **common** — shell (zsh/p10k + `~/.config/shell/`), nvim, tmux, alacritty, river, rofi, lsd, bottom, zed, swayidle, mimeapps, `~/.local/bin` scripts
 - **desktop** — waybar config (desktop variant, GPU temp monitoring)
 - **laptop** — waybar config (laptop variant, battery/brightness)
 - **nvidia** — chromium flags for NVIDIA
 - **default-gpu** — chromium flags for non-NVIDIA
+
+On conflicts the repo wins: existing real files are backed up to `*.pre-stow`
+before linking (never `--adopt`).
+
+### Shell options
+
+`~/.zshrc` / `~/.zprofile` are thin, stowed loaders — the actual options live
+in topical files under `~/.config/shell/` (`env.sh`, `path.sh`, `aliases.sh`,
+`functions.sh`, `zsh/bat-help.zsh`). Edit those, not the rc files.
+Machine-local one-offs and secrets go in `~/.config/shell/local.sh`
+(gitignored, sourced last if present).
+
+Committing dotfile changes from anywhere:
+
+```bash
+dots status     # git in this repo from any cwd
+dots-commit     # stage all + commit with generated summary + push
+```
 
 ## Usage
 
