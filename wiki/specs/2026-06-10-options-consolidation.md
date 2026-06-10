@@ -45,7 +45,7 @@ dotfiles/common/.config/shell/ ─────stow──→ ~/.config/shell/  (f
         └── bat-help.zsh   global -h/--help aliases (parse-time hazard:
                            must load AFTER omz; zsh-only)
 dotfiles/common/.config/mimeapps.list ─stow─→ ~/.config/mimeapps.list
-dotfiles/common/.local/bin/{wifi-reset,gitenv} ─stow─→ ~/.local/bin/…
+dotfiles/common/.local/bin/wifi-reset ─stow─→ ~/.local/bin/…
 
 Load order:
   login shell:     .zprofile → env.sh + path.sh        (river/way-displays see env)
@@ -71,11 +71,10 @@ are idempotent and `typeset -U path` dedupes. This replaces the
 | Stow conflict policy | **Repo wins**: drop `--adopt`; back up conflicting target to `*.pre-stow`, then link |
 | Adopt (borderline list) | `mimeapps.list` only. NOT adopted: `.gitconfig`, GTK settings, btop/htop |
 
-Adopts decided by audit (not in the borderline question, flagged for review at
-implementation): `~/.local/bin/wifi-reset` and `~/.local/bin/gitenv` — both
-hand-written scripts that would be lost on reinstall (same class as `cwt`,
-which already lives in the repo). `cursor-session` is an ELF binary, not
-adopted. If you disagree, strike them from §6.
+Adopt decided by audit (flagged, then user-confirmed): `~/.local/bin/wifi-reset`
+— hand-written script that would be lost on reinstall (same class as `cwt`,
+which already lives in the repo). NOT adopted: `gitenv` (user choice),
+`cursor-session` (ELF binary, not a dotfile).
 
 ## 5. Technical decisions
 
@@ -155,8 +154,7 @@ Alternative: stow `--adopt` to pull live files in — rejected per repo-wins
 | `dotfiles/common/.config/shell/functions.sh` | NEW — `dots`, `dots-commit` |
 | `dotfiles/common/.config/shell/zsh/bat-help.zsh` | NEW — global -h/--help aliases + hazard comment (must load after omz) |
 | `dotfiles/common/.config/mimeapps.list` | NEW — adopted from `~/.config/mimeapps.list` |
-| `dotfiles/common/.local/bin/wifi-reset` | NEW — adopted from `~/.local/bin/wifi-reset` (flagged §4) |
-| `dotfiles/common/.local/bin/gitenv` | NEW — adopted from `~/.local/bin/gitenv` (flagged §4) |
+| `dotfiles/common/.local/bin/wifi-reset` | NEW — adopted from `~/.local/bin/wifi-reset` |
 | `.gitignore` | ADD `dotfiles/common/.config/shell/local.sh` |
 | `modules/02-shell/zsh.bash` | omz installer: `RUNZSH=no CHSH=no KEEP_ZSHRC=yes` |
 | `modules/02-shell/powerlevel10k.bash` | DELETE the `sed ZSH_THEME` block + `try_backup_file` of `.zshrc` |
@@ -170,13 +168,13 @@ Alternative: stow `--adopt` to pull live files in — rejected per repo-wins
 
 Live-file deletions after stow succeeds (migration §7): `~/.zshrc`,
 `~/.zprofile`, `~/.p10k.zsh`, `~/.config/mimeapps.list`,
-`~/.local/bin/{wifi-reset,gitenv}` (each replaced by symlink).
+`~/.local/bin/wifi-reset` (each replaced by symlink).
 
 ## 7. Migration (this laptop)
 
 1. Build all repo files (§6), commit.
 2. Eyeball `diff ~/.config/.tmux.conf` vs managed tmux.conf; delete straggler + `nvim.bck.bck`.
-3. Move live originals aside: `for f in .zshrc .zprofile .p10k.zsh; do mv ~/$f ~/$f.pre-stow; done`; same for `mimeapps.list`, `wifi-reset`, `gitenv`.
+3. Move live originals aside: `for f in .zshrc .zprofile .p10k.zsh; do mv ~/$f ~/$f.pre-stow; done`; same for `mimeapps.list`, `wifi-reset`.
 4. `cd ~/ArchDotfiles/dotfiles && stow -t ~ common` (also restow `laptop`).
 5. Run test suite (§9). On pass, delete `*.pre-stow` files.
 6. Desktop machine: next visit, run steps 3–5 there (its live files may have their own drift — diff `*.pre-stow` against repo before deleting).
