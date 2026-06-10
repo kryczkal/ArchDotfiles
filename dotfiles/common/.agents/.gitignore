@@ -1,0 +1,6 @@
+# External skills installed via `npx skills add` land here through the stowed
+# ~/.agents symlink. They are not part of the dotfiles — reinstall by hand.
+# This .gitignore stays tracked so the dir exists on fresh clones and stow
+# creates the ~/.agents link.
+/skills/
+/.skill-lock.json

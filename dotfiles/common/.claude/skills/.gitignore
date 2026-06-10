@@ -141,3 +141,34 @@ nbproject/
 *.cache
 *.lock
 *.pid
+
+# External skills installed via `npx skills add` — symlinks into ../../.agents/skills/.
+# Own skills are real directories and stay tracked.
+# When installing a new external skill, add its name here (or regenerate:
+#   jq -r '.skills | keys[]' ../../.agents/.skill-lock.json | sed s,^,/,)
+/animejs
+/caveman
+/contribute-catalog
+/css-animations
+/find-skills
+/gsap
+/gsap-core
+/gsap-frameworks
+/gsap-performance
+/gsap-plugins
+/gsap-react
+/gsap-scrolltrigger
+/gsap-timeline
+/gsap-utils
+/hyperframes
+/hyperframes-cli
+/hyperframes-media
+/hyperframes-registry
+/lottie
+/remotion-to-hyperframes
+/tailwind
+/three
+/typegpu
+/ui-ux-pro-max
+/waapi
+/website-to-hyperframes
