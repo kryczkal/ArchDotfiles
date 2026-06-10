@@ -48,3 +48,22 @@ try_backup_file() {
     print_message "Backup created: ${file}.bak"
   fi
 }
+
+# Repo-wins stow policy: move real files that would conflict with stowing
+# <package> aside as <file>.pre-stow, so a plain `stow` then succeeds with the
+# repo version. Must be called from the directory containing the package
+# (stow's own requirement). Parses `stow -n` conflict output (stow 2.4 format:
+# "* cannot stow <src> over existing target <target> since neither a link ...").
+backup_stow_conflicts() {
+  local package="$1"
+  local target_dir="${2:-$HOME}"
+  local conflicts target
+  conflicts=$(stow -n -t "$target_dir" "$package" 2>&1 |
+    sed -n 's/.*existing target \(.*\) since neither a link nor a directory.*/\1/p') || true
+  [ -z "$conflicts" ] && return 0
+  while IFS= read -r target; do
+    [ -e "$target_dir/$target" ] || continue
+    print_message "Conflict: backing up $target_dir/$target -> $target.pre-stow (repo wins)"
+    mv "$target_dir/$target" "$target_dir/$target.pre-stow"
+  done <<<"$conflicts"
+}

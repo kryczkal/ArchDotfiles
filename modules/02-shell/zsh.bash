@@ -27,7 +27,10 @@ answer=$(echo "$answer" | tr '[:upper:]' '[:lower:]')
 if [[ "$answer" =~ ^(yes|y)$ ]]; then
 	paru -S --noconfirm wget
 	print_message "Installing oh-my-zsh..."
-	sh -c "$(wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)"
+	# KEEP_ZSHRC: the curated .zshrc comes from the repo via stow (repo wins);
+	# the installer must not write its own. RUNZSH/CHSH: don't drop into a
+	# shell mid-bootstrap; chsh is handled by this module's own prompt above.
+	RUNZSH=no CHSH=no KEEP_ZSHRC=yes sh -c "$(wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)"
 else
 	print_message "Skipping oh-my-zsh installation."
 fi

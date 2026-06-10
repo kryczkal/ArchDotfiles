@@ -13,28 +13,36 @@ fi
 
 cd "$DOTFILES_DIR" || exit 1
 
+# Repo wins on conflicts: existing real files are moved to *.pre-stow first
+# (never --adopt, which silently absorbs machine files into the repo).
+stow_package() {
+	local package="$1"
+	backup_stow_conflicts "$package"
+	stow -t "$HOME" "$package"
+}
+
 # Always stow common
 print_message "Linking common dotfiles..."
-stow -t "$HOME" common --adopt
+stow_package common
 
 # Determine device type from profile name or ask
 PROFILE="${DOTFILES_PROFILE:-}"
 
 if [[ "$PROFILE" == *"laptop"* ]]; then
 	print_message "Linking laptop dotfiles..."
-	stow -t "$HOME" laptop
+	stow_package laptop
 else
 	print_message "Linking desktop dotfiles..."
-	stow -t "$HOME" desktop
+	stow_package desktop
 fi
 
 # Determine GPU from profile name or ask
 if [[ "$PROFILE" == *"nvidia"* ]]; then
 	print_message "Linking NVIDIA overrides..."
-	stow -t "$HOME" nvidia
+	stow_package nvidia
 else
 	print_message "Linking default GPU config..."
-	stow -t "$HOME" default-gpu
+	stow_package default-gpu
 fi
 
 print_message "Dotfiles linked successfully."

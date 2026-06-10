@@ -7,7 +7,8 @@ IFS=$'\n\t'
 
 source "$(dirname "${BASH_SOURCE[0]}")/../../lib/utils.bash"
 
-# The actual aliases are in dotfiles/common/.config/shell/aliases.sh
-# and get symlinked by stow. Nothing to install here beyond what rust-cli provides.
+# The actual aliases are in dotfiles/common/.config/shell/aliases.sh and get
+# symlinked by stow; the stowed .zshrc sources them automatically. Nothing to
+# install here beyond what rust-cli provides.
 print_message "Aliases are managed via stow (dotfiles/common/.config/shell/aliases.sh)"
-print_message "Make sure your .zshrc/.bashrc sources ~/.config/shell/aliases.sh"
+print_message "The stowed .zshrc sources ~/.config/shell/*.sh automatically."
