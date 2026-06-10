@@ -1,0 +1,66 @@
+#!/bin/bash
+# Reset the RTL8852AE Wi-Fi card (PCI 0000:02:00.0) without rebooting.
+#
+# Usage:
+#   wifi-reset         # default: PCI remove + rescan (most reliable)
+#   wifi-reset soft    # modprobe -r / modprobe (cleanest, works for driver-state bugs)
+#   wifi-reset nuke    # both soft reload AND PCI rescan, for really wedged states
+#
+# Why two modes:
+#   - soft: unloads the driver module and reloads it. Reinitializes driver
+#     memory + firmware. Fails if the module refuses to unload (rare).
+#   - hard: unbinds the device from PCI and re-enumerates the bus. Triggers
+#     a full hardware-level re-probe — survives even when the driver is
+#     wedged internally.
+
+set -u
+
+PCI_ID="0000:02:00.0"
+IFACE="wlp2s0"
+MODULE="rtw89_8852ae_git"
+
+[ "$EUID" -eq 0 ] || exec sudo -E "$0" "$@"
+
+soft_reset() {
+    echo ">> soft reset: reloading $MODULE"
+    if lsmod | grep -q "^${MODULE} "; then
+        modprobe -r "$MODULE" || { echo "!! failed to unload $MODULE"; return 1; }
+    fi
+    sleep 1
+    modprobe "$MODULE" || { echo "!! failed to load $MODULE"; return 1; }
+}
+
+hard_reset() {
+    echo ">> hard reset: PCI remove + rescan for $PCI_ID"
+    if [ -e "/sys/bus/pci/devices/$PCI_ID" ]; then
+        echo 1 > "/sys/bus/pci/devices/$PCI_ID/remove" || return 1
+        sleep 2
+    else
+        echo "   (device not currently bound — just rescanning)"
+    fi
+    echo 1 > /sys/bus/pci/rescan || return 1
+    sleep 2
+}
+
+wait_iface() {
+    for i in $(seq 1 20); do
+        if ip link show "$IFACE" &>/dev/null; then
+            echo ">> $IFACE came back in ${i}s"
+            if systemctl is-active --quiet NetworkManager; then
+                nmcli device connect "$IFACE" &>/dev/null || true
+            fi
+            return 0
+        fi
+        sleep 1
+    done
+    echo "!! $IFACE did not reappear after 20s — run 'dmesg | tail -50'"
+    return 1
+}
+
+case "${1:-hard}" in
+    soft|-s|--soft)  soft_reset && wait_iface ;;
+    hard|-H|--hard)  hard_reset && wait_iface ;;
+    nuke|-n|--nuke)  soft_reset; hard_reset; wait_iface ;;
+    -h|--help)       sed -n '2,15p' "$0" | sed 's/^# //;s/^#$//'; exit 0 ;;
+    *)               echo "usage: $(basename "$0") [soft|hard|nuke]"; exit 1 ;;
+esac
