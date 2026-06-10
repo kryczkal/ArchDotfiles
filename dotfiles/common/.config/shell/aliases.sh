@@ -1,15 +1,12 @@
-#!/usr/bin/env bash
-# Shell aliases — sourced by .bashrc / .zshrc
-# Managed by stow, edit this file instead of appending to rc files.
+# Shell aliases — sourced by .zshrc. Managed by stow (ArchDotfiles).
+# Global -h/--help aliases live in zsh/bat-help.zsh (load-order sensitive).
 
-# Terminal spawning
+# Spawn a new terminal in the current directory
 alias .='$TERM --working-directory=$(pwd) & disown'
 
 # Modern CLI replacements (lsd, bat)
 alias ls="lsd"
 alias l="lsd -lah"
-alias cat="bat"
+alias cat="bat -p"
 
-# Colored help/man via bat
-alias -g -- -h='-h 2>&1 | bat --language=help --style=plain'
-alias -g -- --help='--help 2>&1 | bat --language=help --style=plain'
+alias paru='paru --color=always'
