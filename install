@@ -42,11 +42,14 @@ say "dotfiles: stow home/common + home/host-$host (repo wins, conflicts -> *.pre
 for f in .bashrc .bash_profile .bash_logout; do   # /etc/skel leftovers, zsh only here
   [[ -f ~/$f ]] && cmp -s ~/"$f" /etc/skel/"$f" && rm ~/"$f"
 done
+# --no-folding: link files, never directories. A folded ~/.config link would
+# make every app write its state into the repo.
+mkdir -p ~/.config ~/.local/bin ~/.local/share ~/.local/state ~/.cache
 stow_pkg() {
-  { stow -n -t ~ "$1" 2>&1 || true; } |
+  { stow -n --no-folding -t ~ "$1" 2>&1 || true; } |
     sed -n 's/.*existing target \(.*\) since neither a link nor a directory.*/\1/p' |
     while read -r t; do [[ -e ~/$t ]] && mv -v ~/"$t" ~/"$t.pre-stow"; done
-  stow -Rt ~ "$1"
+  stow -R --no-folding -t ~ "$1"
 }
 (cd home && stow_pkg common && { [[ -d host-$host ]] && stow_pkg "host-$host" || true; })
 # home/seed: copied once, never overwritten. For files apps rewrite in place
