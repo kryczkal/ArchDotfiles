@@ -15,6 +15,7 @@ sync)
   (( n )) || { echo "dots: nothing to commit"; exit 0; }
   summary=$(git status --porcelain | awk '{print $NF}' | cut -d/ -f1-3 | sort -u | head -4 | paste -sd, - | sed 's/,/, /g')
   git add -A && git commit -qm "sync($(</etc/hostname)): $n file(s): $summary" && git push -q && echo "pushed: $n file(s)"
+  echo "drift: $("$0" drift 2>/dev/null | grep -c '^  ') unmanaged path(s), see 'dots drift'"
   ;;
 drift)
   echo "## HOME: real files where the repo is not the owner (add app state to home/.driftignore)"

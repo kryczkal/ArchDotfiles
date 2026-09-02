@@ -48,6 +48,11 @@ stow_pkg() {
   stow -Rt ~ "$1"
 }
 (cd home && stow_pkg common && { [[ -d host-$host ]] && stow_pkg "host-$host" || true; })
+# home/seed: copied once, never overwritten. For files apps rewrite in place
+# (atomic rename would replace a symlink with a real file).
+(cd home/seed && find . -type f | while read -r f; do
+  [[ -e ~/${f#./} ]] || install -Dm644 -v "$f" ~/"${f#./}"
+done)
 
 say "services + shell"
 sudo systemctl enable -q --now NetworkManager bluetooth fstrim.timer systemd-timesyncd

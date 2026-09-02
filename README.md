@@ -18,6 +18,7 @@ git clone git@github.com:kryczkal/ArchDotfiles.git ~/ArchDotfiles
 | `etc/` | system files, copied to `/etc` verbatim |
 | `home/common/` | stow package, everything shared |
 | `home/host-<hostname>/` | stow package, per-machine overrides (monitors, waybar tweaks) |
+| `home/seed/` | copied once, never overwritten: files apps rewrite themselves (mimeapps.list) |
 | `docs/` | design notes |
 
 ## Rules
