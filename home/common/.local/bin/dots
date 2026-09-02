@@ -30,7 +30,7 @@ drift)
     ignored=0; while read -r pat; do [[ -n $pat && $rel == $pat ]] && { ignored=1; break; }; done < "$ign"
     (( ignored )) && continue
     [[ $rel == .local/bin/* && -f $p ]] && ! head -1 "$p" | grep -qE '^#!.*\b(ba|z)?sh\b' && continue  # pip/npm shims
-    if [[ -d $p ]] && in_stow "$rel"; then   # managed dir (stow --no-folding): only stray real files inside count
+    if [[ -d $p ]] && in_repo "$rel"; then   # managed dir (stow --no-folding): only stray real files inside count
       find "$p" -type f | while read -r f; do in_repo "${f#"$HOME"/}" || echo "  ${f#"$HOME"/}  (stray file in managed dir)"; done
       continue
     fi
