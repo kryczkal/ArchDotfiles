@@ -32,7 +32,8 @@ sudo pacman -Syu --needed --noconfirm $(pkgs pkgs/base.txt pkgs/desktop.txt "pkg
 say "packages: aur"
 if ! command -v paru >/dev/null; then
   tmp=$(mktemp -d)
-  git clone -q https://aur.archlinux.org/paru-bin.git "$tmp" && (cd "$tmp" && makepkg -si --noconfirm)
+  # source build: paru-bin on AUR lags libalpm bumps. -r drops rust afterwards.
+  git clone -q https://aur.archlinux.org/paru.git "$tmp" && (cd "$tmp" && makepkg -sir --noconfirm)
   rm -rf "$tmp"
 fi
 paru -S --needed --noconfirm $(pkgs pkgs/aur.txt)
