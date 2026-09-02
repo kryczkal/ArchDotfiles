@@ -1,1 +1,2 @@
 amd-ucode vulkan-radeon tlp
+lib32-vulkan-radeon lib32-mesa  # Steam (32-bit client)

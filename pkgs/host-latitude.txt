@@ -1,1 +1,2 @@
 intel-ucode vulkan-intel intel-media-driver thermald tlp
+lib32-vulkan-intel lib32-mesa   # Steam (32-bit client)

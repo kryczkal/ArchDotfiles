@@ -4,5 +4,6 @@ swayidle waylock                                        # idle lock, lock before
 grim slurp wl-clipboard                                 # for: river init Print binding, nvim clipboard
 xdg-desktop-portal xdg-desktop-portal-wlr xdg-desktop-portal-gtk   # screen share + file dialogs in Brave
 gnome-keyring                                           # for: river init (secrets, ssh agent)
-ttf-meslo-nerd noto-fonts noto-fonts-cjk noto-fonts-emoji   # terminal/p10k font, browser fonts, CJK, emoji
+ttf-meslo-nerd noto-fonts noto-fonts-cjk noto-fonts-emoji ttf-liberation   # terminal/p10k font, browser fonts, CJK, emoji, Arial-compatible (Steam)
 nautilus                                                # for: river init Super+E
+steam ntsync-autoload                                   # 32-bit GL/Vulkan drivers per host in host-*.txt; ntsync: Proton sync
