@@ -1,78 +1,40 @@
-# Arch Dotfiles
+# ArchDotfiles
 
-Personal dotfiles and bootstrap scripts for Arch Linux with River (Wayland).
-
-## Quick Start
+Two jobs: (a) fresh Arch install to a working river desktop in one command,
+(b) one set of configs shared across machines, edited in place.
 
 ```bash
-# Fresh Arch install → working environment in one command:
-git clone https://github.com/kryczkal/ArchDotfiles.git
-cd ArchDotfiles
-./bootstrap.sh --profile desktop-nvidia
+git clone git@github.com:kryczkal/ArchDotfiles.git ~/ArchDotfiles
+~/ArchDotfiles/install          # idempotent, re-run any time
+~/ArchDotfiles/install --keys   # once: ssh key
 ```
 
-## Available Profiles
+## Layout
 
-| Profile | Description |
+| path | what |
 |---|---|
-| `desktop-nvidia` | Desktop with NVIDIA proprietary drivers |
-| `desktop-nouveau` | Desktop with open-source nouveau drivers |
-| `laptop` | Laptop (integrated GPU, battery/brightness support) |
+| `install` | the whole bootstrap, ~70 lines, no prompts |
+| `pkgs/*.txt` | package lists. `base`, `desktop`, `aur`, `host-<hostname>` |
+| `etc/` | system files, copied to `/etc` verbatim |
+| `home/common/` | stow package, everything shared |
+| `home/host-<hostname>/` | stow package, per-machine overrides (monitors, waybar tweaks) |
+| `docs/` | design notes |
 
-## What Gets Installed
+## Rules
 
-The bootstrap runs modules in phases:
+- A config file is managed iff it is a symlink into this repo. Editing it edits the repo.
+- Packages are data. `install` runs `pacman -S --needed` on the lists, nothing else.
+- Per-host differences go in `home/host-<hostname>/` and `pkgs/host-<hostname>.txt`, never in `common`.
+- Shell options live in `~/.config/shell/`. `.zshrc` and `.zprofile` are loaders.
+- Machine-local secrets go in `~/.config/shell/local.sh` (gitignored).
 
-| Phase | What |
-|---|---|
-| `00-system` | Locale, clock, user groups |
-| `01-packages` | Paru (AUR helper), linux headers |
-| `02-shell` | Zsh, Powerlevel10k, Rust CLI tools (bat, lsd, fd, etc.) |
-| `03-desktop` | River WM, Waybar, Rofi, Mako, PipeWire, screenshots, clipboard |
-| `04-gpu` | NVIDIA proprietary or nouveau drivers |
-| `05-apps` | Yazi, Nautilus, OBS |
-| `99-finalize` | Stow dotfiles, SSH key, GPG key |
-
-## Dotfiles (Stow Packages)
-
-Configs are managed with [GNU Stow](https://www.gnu.org/software/stow/). Packages:
-
-- **common** — shell (zsh/p10k + `~/.config/shell/`), nvim, tmux, alacritty, river, rofi, lsd, bottom, zed, swayidle, mimeapps, `~/.local/bin` scripts
-- **desktop** — waybar config (desktop variant, GPU temp monitoring)
-- **laptop** — waybar config (laptop variant, battery/brightness)
-- **nvidia** — chromium flags for NVIDIA
-- **default-gpu** — chromium flags for non-NVIDIA
-
-On conflicts the repo wins: existing real files are backed up to `*.pre-stow`
-before linking (never `--adopt`).
-
-### Shell options
-
-`~/.zshrc` / `~/.zprofile` are thin, stowed loaders — the actual options live
-in topical files under `~/.config/shell/` (`env.sh`, `path.sh`, `aliases.sh`,
-`functions.sh`, `zsh/bat-help.zsh`). Edit those, not the rc files.
-Machine-local one-offs and secrets go in `~/.config/shell/local.sh`
-(gitignored, sourced last if present).
-
-Committing dotfile changes from anywhere:
+## Daily
 
 ```bash
-dots status     # git in this repo from any cwd
-dots-commit     # stage all + commit with generated summary + push
+dots status | diff | log    # git in the repo from anywhere
+dots sync                   # stage, commit with summary, push
+dots drift                  # config on this machine the repo does not own
+dots pkgs                   # explicitly installed packages missing from pkgs/
 ```
 
-## Usage
-
-```bash
-./bootstrap.sh --help       # Show usage and profiles
-./bootstrap.sh --list       # List profiles
-./bootstrap.sh --dry-run --profile laptop   # Preview without installing
-```
-
-## Runtime Scripts
-
-Utility scripts in `scripts/` for day-to-day use (not part of bootstrap):
-
-- `chromium-app-manager.sh` — Create/manage Chromium PWA shortcuts
-- `display-settings.sh` — Monitor arrangement via way-displays
-- `input-enabler.sh` — Map input devices to outputs (tablets, etc.)
+Add app-generated state to `home/.driftignore` / `etc/.driftignore` so `dots drift` stays quiet.

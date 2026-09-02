@@ -1,0 +1,44 @@
+#!/bin/bash
+# dots — the dotfiles repo from anywhere.
+#   dots <git args>   git inside the repo            (dots status, dots diff)
+#   dots sync         stage all, commit with a summary, push
+#   dots drift        config on this machine the repo does not own
+#   dots pkgs         explicitly installed packages not listed in pkgs/*.txt
+set -euo pipefail
+repo=${DOTFILES:-$HOME/ArchDotfiles}
+
+case ${1:-} in
+sync)
+  cd "$repo"
+  n=$(git status --porcelain | wc -l)
+  (( n )) || { echo "dots: nothing to commit"; exit 0; }
+  summary=$(git status --porcelain | awk '{print $NF}' | cut -d/ -f1-3 | sort -u | head -4 | paste -sd, - | sed 's/,/, /g')
+  git add -A && git commit -qm "sync($(</etc/hostname)): $n file(s): $summary" && git push -q && echo "pushed: $n file(s)"
+  ;;
+drift)
+  echo "## HOME: real files where the repo is not the owner (add app state to home/.driftignore)"
+  ign="$repo/home/.driftignore"
+  for p in ~/.[!.]* ~/.config/* ~/.local/bin/*; do
+    [[ -e $p && ! -L $p ]] || continue
+    rel=${p#"$HOME"/}
+    [[ -f $ign ]] && grep -qxF -- "$rel" "$ign" && continue
+    [[ $rel == .local/bin/* && -f $p ]] && ! head -1 "$p" | grep -qE '^#!.*\b(ba|z)?sh\b' && continue  # pip/npm shims
+    echo "  $rel"
+  done
+  echo "## ETC: package files modified by hand, not in etc/"
+  pacman -Qii 2>/dev/null | awk '/^MODIFIED/{print $2}' | while read -r f; do
+    [[ -e $repo/etc/${f#/etc/} ]] || echo "  $f"
+  done
+  echo "## ETC: files no package owns, not in etc/ (globs in etc/.driftignore)"
+  ign="$repo/etc/.driftignore"
+  comm -23 <(sudo find /etc -type f | sort) <(pacman -Qlq | grep '^/etc/' | sort) |
+    { [[ -f $ign ]] && grep -vEf <(sed 's/[.]/\\./g; s/\*/.*/g; s|^|^|' "$ign") || cat; } |
+    while read -r f; do [[ -e $repo/etc/${f#/etc/} ]] || echo "  $f"; done
+  ;;
+pkgs)
+  comm -23 <(pacman -Qqe | sort) <(sed 's/#.*//' "$repo"/pkgs/*.txt | tr -s ' \n' '\n' | grep -v '^$' | sort -u)
+  ;;
+*)
+  git -C "$repo" "$@"
+  ;;
+esac

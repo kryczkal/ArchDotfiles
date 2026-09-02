@@ -1,0 +1,171 @@
+#!/bin/bash
+# lid-awake — keep the machine running with the lid closed. Temporary, no reboot.
+#
+# Usage:
+#   lid-awake on       # closing the lid no longer suspends
+#   lid-awake off      # restore normal suspend-on-lid-close
+#   lid-awake toggle
+#   lid-awake status   # default when called with no argument
+#
+# How it works:
+#   Takes a logind "handle-lid-switch" block inhibitor, held open by a
+#   transient systemd --user unit. Per logind.conf(5), the low-level
+#   "handle-*" inhibitors are ALWAYS honored, irrespective of
+#   LidSwitchIgnoreInhibited= — that setting only decides whether the lid
+#   ignores the *high-level* shutdown/reboot/sleep/idle locks (it defaults
+#   to yes, which is why a plain `sleep` inhibitor would NOT work here).
+#
+# Why an inhibitor rather than editing /etc/systemd/logind.conf:
+#   - No root and no password: polkit ships allow_active=yes for
+#     org.freedesktop.login1.inhibit-handle-lid-switch.
+#   - systemd-logind has no ExecReload, so a config change only takes effect
+#     after `systemctl restart systemd-logind`, which can disturb the running
+#     session's device/seat bookkeeping. Not worth it for a temporary change.
+#   - It is genuinely temporary: released by `off`, by logout, or by reboot.
+#     There is no way to leave it on by accident forever.
+#
+# Caveat: with the lid shut the internal panel stays powered — the compositor
+# is never told the lid moved. Expect heat and battery drain; prefer AC.
+# The idle lock (swayidle, 400s) still fires, so the session still locks.
+
+set -u
+
+UNIT="lid-awake"
+WHO="lid-awake"
+WHY="Keep working with the lid closed"
+
+# --- helpers ----------------------------------------------------------------
+
+unit_active() {
+	systemctl --user is-active --quiet "$UNIT"
+}
+
+# Ground truth: ask logind what it is actually holding, don't trust the unit
+# alone. WHO is the first column of `systemd-inhibit --list`.
+inhibitor_held() {
+	systemd-inhibit --list 2>/dev/null |
+		grep -q "^${WHO}[[:space:]].*handle-lid-switch"
+}
+
+lid_state() {
+	local f
+	for f in /proc/acpi/button/lid/*/state; do
+		[ -r "$f" ] || continue
+		awk '{print $2}' "$f"
+		return
+	done
+	echo "unknown"
+}
+
+on_ac() {
+	local ps
+	for ps in /sys/class/power_supply/*; do
+		[ -r "$ps/type" ] || continue
+		[ "$(cat "$ps/type")" = "Mains" ] || continue
+		[ "$(cat "$ps/online" 2>/dev/null)" = "1" ] && return 0
+	done
+	return 1
+}
+
+# Foreign lid inhibitors (a desktop session, a VM, another copy of this idea).
+# Worth surfacing: if one exists, `off` will not restore suspend on its own.
+foreign_inhibitors() {
+	systemd-inhibit --list 2>/dev/null |
+		grep 'handle-lid-switch' |
+		grep -v "^${WHO}[[:space:]]"
+}
+
+# --- commands ---------------------------------------------------------------
+
+cmd_on() {
+	if inhibitor_held; then
+		echo "lid-awake: already on"
+		return 0
+	fi
+
+	# --collect so a failed run is garbage-collected instead of lingering as
+	# a dead unit that blocks the next start.
+	systemd-run --user --quiet --collect --unit="$UNIT" \
+		--description="Keep system awake with the lid closed" \
+		systemd-inhibit \
+		--what=handle-lid-switch \
+		--who="$WHO" \
+		--why="$WHY" \
+		--mode=block \
+		sleep infinity || {
+		echo "lid-awake: failed to start the holder unit" >&2
+		return 1
+	}
+
+	# The inhibitor registers a moment after the unit starts. Confirm it
+	# rather than reporting success on the strength of systemd-run exiting 0.
+	local i
+	for i in 1 2 3 4 5 6 7 8 9 10; do
+		if inhibitor_held; then
+			echo "lid-awake: ON — closing the lid will not suspend"
+			on_ac || echo "lid-awake: note — on battery; the panel stays powered while shut"
+			return 0
+		fi
+		sleep 0.2
+	done
+
+	echo "lid-awake: unit started but no inhibitor appeared — see 'systemctl --user status $UNIT'" >&2
+	return 1
+}
+
+cmd_off() {
+	systemctl --user stop "$UNIT" >/dev/null 2>&1
+	systemctl --user reset-failed "$UNIT" >/dev/null 2>&1
+
+	if inhibitor_held; then
+		echo "lid-awake: failed to release the inhibitor" >&2
+		return 1
+	fi
+
+	echo "lid-awake: OFF — normal suspend-on-lid-close restored"
+
+	local foreign
+	foreign=$(foreign_inhibitors)
+	if [ -n "$foreign" ]; then
+		echo "lid-awake: warning — another process still inhibits the lid switch:"
+		echo "$foreign" | sed 's/^/  /'
+	fi
+}
+
+cmd_status() {
+	if inhibitor_held; then
+		echo "state: ON  (lid close will not suspend)"
+	else
+		echo "state: OFF (lid close suspends, logind default)"
+	fi
+
+	echo "lid:   $(lid_state)"
+	if on_ac; then echo "power: AC"; else echo "power: battery"; fi
+
+	if unit_active && ! inhibitor_held; then
+		echo "warn:  holder unit is running but holds no inhibitor"
+	fi
+	if inhibitor_held && ! unit_active; then
+		echo "warn:  inhibitor held by something outside the $UNIT unit"
+	fi
+
+	local foreign
+	foreign=$(foreign_inhibitors)
+	if [ -n "$foreign" ]; then
+		echo "other lid inhibitors:"
+		echo "$foreign" | sed 's/^/  /'
+	fi
+}
+
+case "${1:-status}" in
+on | start) cmd_on ;;
+off | stop) cmd_off ;;
+toggle)
+	if inhibitor_held; then cmd_off; else cmd_on; fi
+	;;
+status | "") cmd_status ;;
+*)
+	echo "usage: lid-awake {on|off|toggle|status}" >&2
+	exit 2
+	;;
+esac

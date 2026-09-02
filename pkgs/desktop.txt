@@ -1,0 +1,7 @@
+# River desktop with a browser. pacman.
+river-classic waybar rofi mako libnotify alacritty
+swayidle waylock wl-clipboard grim slurp brightnessctl
+xdg-desktop-portal xdg-desktop-portal-wlr xdg-desktop-portal-gtk
+gnome-keyring libsecret polkit
+mesa ttf-meslo-nerd otf-font-awesome noto-fonts noto-fonts-emoji noto-fonts-cjk
+yazi mpv

@@ -1,0 +1,2 @@
+# AUR, via paru.
+zsh-theme-powerlevel10k way-displays brave-bin apple-fonts

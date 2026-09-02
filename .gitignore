@@ -1,9 +1,2 @@
-installed-packages/
-temporary-files/
-lazy-lock.json
-
-.idea/
-__pycache__/
-
-# Machine-local shell overrides (lands in repo via folded stow dir)
-dotfiles/common/.config/shell/local.sh
+home/common/.config/shell/local.sh
+*.pre-stow
