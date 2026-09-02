@@ -29,15 +29,18 @@ drift)
     [[ $rel == .local/bin/* && -f $p ]] && ! head -1 "$p" | grep -qE '^#!.*\b(ba|z)?sh\b' && continue  # pip/npm shims
     echo "  $rel"
   done
-  echo "## ETC: package files modified by hand, not in etc/"
-  pacman -Qii 2>/dev/null | grep -oE '/etc/\S+ \[modified\]' | cut -d' ' -f1 | while read -r f; do
-    [[ -e $repo/etc/${f#/etc/} ]] || echo "  $f"
-  done
-  echo "## ETC: files no package owns, not in etc/ (globs in etc/.driftignore)"
   ign="$repo/etc/.driftignore"
-  comm -23 <(sudo find /etc -type f | sort) <(pacman -Qlq | grep '^/etc/' | sort) |
-    { [[ -f $ign ]] && grep -vEf <(sed 's/[.]/\\./g; s/\*/.*/g; s|^|^|' "$ign") || cat; } |
-    while read -r f; do [[ -e $repo/etc/${f#/etc/} ]] || echo "  $f"; done
+  etc_filter() {  # drop paths in etc/.driftignore (globs) or present in repo etc/
+    while read -r f; do
+      [[ -e $repo/etc/${f#/etc/} ]] && continue
+      skip=0; while read -r pat; do [[ -n $pat && $f == $pat ]] && { skip=1; break; }; done < "$ign"
+      (( skip )) || echo "  $f"
+    done
+  }
+  echo "## ETC: package files modified by hand, not in etc/ (globs in etc/.driftignore)"
+  pacman -Qii 2>/dev/null | grep -oE '/etc/\S+ \[modified\]' | cut -d' ' -f1 | etc_filter
+  echo "## ETC: files no package owns, not in etc/"
+  comm -23 <(sudo find /etc -type f | sort) <(pacman -Qlq | grep '^/etc/' | sort) | etc_filter
   ;;
 ignore)
   shift; printf '%s\n' "$@" >> "$repo/home/.driftignore"; sort -u -o "$repo/home/.driftignore" "$repo/home/.driftignore"
