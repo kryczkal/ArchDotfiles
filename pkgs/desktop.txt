@@ -4,5 +4,5 @@ swayidle waylock                                        # idle lock, lock before
 grim slurp wl-clipboard                                 # for: river init Print binding, nvim clipboard
 xdg-desktop-portal xdg-desktop-portal-wlr xdg-desktop-portal-gtk   # screen share + file dialogs in Brave
 gnome-keyring                                           # for: river init (secrets, ssh agent)
-ttf-meslo-nerd noto-fonts noto-fonts-emoji              # terminal/p10k font, browser fonts, emoji
+ttf-meslo-nerd noto-fonts noto-fonts-cjk noto-fonts-emoji   # terminal/p10k font, browser fonts, CJK, emoji
 nautilus                                                # for: river init Super+E

@@ -6,4 +6,4 @@ alias ls="lsd"
 alias l="lsd -lah"
 alias cat="bat -p"
 
-alias paru='paru --color=always'
+alias paru='paru --color=always --bottomup'
