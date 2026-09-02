@@ -2,7 +2,8 @@
 # drift — what this machine has that the repo does not own, and the reverse.
 # Run after install on a new machine, before wiping one, and now and then to
 # catch an installer writing into ~/.zshrc. Needs sudo for /etc.
-#   HOME  repo -> machine: every shipped file is linked (stow) or present (seed)
+#   HOME  repo -> machine: every shipped file (common, seed, host-<hostname>)
+#         is linked (stow) or present (seed)
 #         machine -> repo: every real file in ~/.* (files, not dirs), ~/.config/**
 #         and ~/.local/bin/* (shell scripts only, pip/npm shims skipped) is owned,
 #         in home/.driftignore, or listed. Listed at the granularity you would
@@ -14,7 +15,8 @@ set -euo pipefail
 shopt -s nullglob
 cd "$(dirname "${BASH_SOURCE[0]}")"
 repo=$PWD
-pkgs() { (cd "$repo/home" && printf '%s\n' common seed host-*); }   # stow packages + seed
+host=$(</etc/hostname)
+pkgs() { echo common seed; [[ -d home/host-$host ]] && echo "host-$host"; return 0; }
 shipped() { (cd "$repo/home" && find $(pkgs) -type f ! -name .gitignore | cut -d/ -f2-) | sort -u; }
 owned() { local d; for d in $(pkgs); do [[ -e $repo/home/$d/$1 ]] && return 0; done; return 1; }
 prune=(); while read -r pat; do [[ -n $pat && $pat != \#* ]] && prune+=(-path ~/"$pat" -o); done < home/.driftignore
