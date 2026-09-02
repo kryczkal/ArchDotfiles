@@ -1,4 +1,6 @@
-# zsh options, history, completion, keys. Replaces oh-my-zsh (2026-09).
+# options.zsh: zsh behaviour only: setopt, history, completion, bindkey.
+# Managed by stow (ArchDotfiles). Not here: exports (env.sh), aliases
+# (aliases.sh). Replaces oh-my-zsh (dropped 2026-09-02).
 
 mkdir -p "$XDG_STATE_HOME/zsh"
 HISTFILE="$XDG_STATE_HOME/zsh/history"

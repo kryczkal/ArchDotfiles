@@ -1,7 +1,9 @@
-# Environment variables. Sourced by .zprofile (login) and .zshrc (interactive).
-# Managed by stow (ArchDotfiles). Must load before path.sh.
+# env.sh: exported variables only. Managed by stow (ArchDotfiles).
+# Not here: PATH (path.sh), aliases (aliases.sh), setopt/bindkey/completion
+# (zsh/options.zsh), secrets and machine-only values (local.sh, gitignored).
+# Sourced twice (.zprofile, .zshrc): every line must be idempotent.
+# Loads before path.sh: path.sh uses XDG_DATA_HOME and ANDROID_HOME.
 
-# XDG base dirs. Everything below routes app state out of ~ into these.
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_DATA_HOME="$HOME/.local/share"
 export XDG_STATE_HOME="$HOME/.local/state"

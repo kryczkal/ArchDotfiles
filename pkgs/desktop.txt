@@ -1,7 +1,7 @@
-# River desktop with a browser. pacman. mesa comes in as a dep of river-classic.
+# River desktop with a browser. pacman. mesa is a dep of river-classic.
 river-classic waybar rofi mako libnotify alacritty
 swayidle waylock wl-clipboard grim slurp brightnessctl
 xdg-desktop-portal xdg-desktop-portal-wlr xdg-desktop-portal-gtk
 gnome-keyring polkit udisks2 udiskie
 ttf-meslo-nerd noto-fonts noto-fonts-emoji
-yazi mpv imv
+yazi

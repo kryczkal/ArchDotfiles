@@ -1,6 +1,11 @@
-# Thin loader. Options live in ~/.config/shell/. Managed by stow (ArchDotfiles).
+# .zshrc: interactive-shell loader. Managed by stow (ArchDotfiles).
+# Only `source` lines, in this order. Options live in ~/.config/shell/:
+#   env.sh        exports          path.sh       PATH
+#   zsh/options.zsh  setopt/keys   aliases.sh    aliases
+#   zsh/bat-help.zsh global -h aliases (must stay last)
+#   local.sh      machine-only, secrets, gitignored
+# If a tool appended lines here, that is drift: move them to the right file.
 
-# p10k instant prompt: keep first, nothing may print above it.
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi

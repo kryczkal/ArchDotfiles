@@ -1,6 +1,7 @@
-# PATH — sourced by .zprofile (login) and .zshrc (interactive).
-# typeset -U keeps entries unique, so double-sourcing never duplicates.
-# Managed by stow (ArchDotfiles).
+# path.sh: PATH entries only. Managed by stow (ArchDotfiles).
+# Not here: exports (env.sh). Needs env.sh first. typeset -U dedupes, so
+# double-sourcing is safe. An installer that appends PATH to .zshrc/.profile
+# is drift: move the line here.
 
 typeset -U path PATH
 path+=(
