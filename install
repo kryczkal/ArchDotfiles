@@ -64,7 +64,10 @@ mv_once ~/.aws ~/.config/aws
 mv_once ~/go ~/.local/share/go
 
 say "services + shell"
-sudo systemctl enable -q --now NetworkManager bluetooth fstrim.timer systemd-timesyncd
+sudo systemctl enable -q --now NetworkManager bluetooth fstrim.timer systemd-timesyncd tlp
+sudo systemctl mask -q systemd-rfkill.service systemd-rfkill.socket   # tlp handles rfkill
+pacman -Q thermald &>/dev/null && sudo systemctl enable -q --now thermald
+systemctl --user enable -q gcr-ssh-agent.socket gnome-keyring-daemon.socket
 [[ $(getent passwd "$USER" | cut -d: -f7) == */zsh ]] || chsh -s /usr/bin/zsh
 
 say "done. next: './install --keys', then 'dots drift' and 'dots pkgs' to see what the repo does not own."

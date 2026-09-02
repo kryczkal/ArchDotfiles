@@ -1,1 +1,1 @@
-intel-ucode vulkan-intel intel-media-driver fprintd
+intel-ucode vulkan-intel intel-media-driver thermald

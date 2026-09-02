@@ -1,6 +1,8 @@
 # Always. pacman. Space or newline separated, # comments ok.
 base base-devel linux linux-firmware sof-firmware
-networkmanager openssh sudo git stow rsync wget curl unzip
+networkmanager openssh sudo git stow rsync curl unzip
 zsh zsh-autosuggestions zsh-syntax-highlighting
-neovim tmux ripgrep fd bat lsd bottom fzf man-db
-zram-generator pipewire pipewire-pulse wireplumber bluez bluez-utils
+neovim tmux ripgrep fd bat lsd bottom fzf man-db man-pages
+zram-generator e2fsprogs dosfstools exfatprogs
+pipewire pipewire-pulse pipewire-alsa wireplumber bluez bluez-utils
+tlp xdg-user-dirs xdg-utils
