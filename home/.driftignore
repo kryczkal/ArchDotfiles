@@ -19,6 +19,7 @@
 .config/Slack
 .config/spotify
 .config/systemd
+.config/tmux/plugins
 .config/user-dirs.dirs
 .config/user-dirs.locale
 .lesshst
