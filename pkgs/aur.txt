@@ -1,2 +1,2 @@
 # AUR, via paru.
-zsh-theme-powerlevel10k way-displays brave-bin
+zsh-theme-powerlevel10k brave-bin
