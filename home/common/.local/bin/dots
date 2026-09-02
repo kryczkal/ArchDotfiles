@@ -39,11 +39,14 @@ drift)
     rel=${f#"$HOME"/}
     owned "$rel" && continue
     [[ $rel == .local/bin/* ]] && ! head -1 "$f" | grep -qE '^#!.*\b(ba|z)?sh\b' && continue
-    echo "  $rel"
-  done
+    # report at the granularity you would ignore: the top entry under ~/.config
+    # (or ~/.local/bin) when the repo owns nothing inside it, else the file
+    key=$(cut -d/ -f1-2 <<<"$rel")
+    if [[ $key != "$rel" ]] && ! owned "$key"; then echo "  $key/"; else echo "  $rel"; fi
+  done | sort -u
   echo "## ETC"
   (cd "$repo/etc" && find . -type f ! -name .driftignore | cut -c3-) | while read -r rel; do
-    cmp -s "$repo/etc/$rel" "/etc/$rel" || echo "  /etc/$rel  (differs from repo, run install or copy back)"
+    sudo cmp -s "$repo/etc/$rel" "/etc/$rel" || echo "  /etc/$rel  (differs from repo, run install or copy back)"
   done
   { pacman -Qii 2>/dev/null | grep -oE '/etc/\S+ \[modified\]' | cut -d' ' -f1
     comm -23 <(sudo find /etc -type f | sort) <(pacman -Qlq | grep '^/etc/' | sort); } | sort -u |
