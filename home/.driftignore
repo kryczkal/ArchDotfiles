@@ -7,6 +7,7 @@
 .config/Cursor
 .config/dconf
 .config/discord
+.config/git/local
 .config/Google
 .config/google-chrome
 .config/gtk-2.0
@@ -15,6 +16,7 @@
 .config/obsidian
 .config/procps
 .config/pulse
+.config/shell/local.sh
 .config/Signal
 .config/Slack
 .config/spotify
