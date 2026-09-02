@@ -30,7 +30,7 @@ drift)
     echo "  $rel"
   done
   echo "## ETC: package files modified by hand, not in etc/"
-  pacman -Qii 2>/dev/null | awk '/^MODIFIED/{print $2}' | while read -r f; do
+  pacman -Qii 2>/dev/null | grep -oE '/etc/\S+ \[modified\]' | cut -d' ' -f1 | while read -r f; do
     [[ -e $repo/etc/${f#/etc/} ]] || echo "  $f"
   done
   echo "## ETC: files no package owns, not in etc/ (globs in etc/.driftignore)"

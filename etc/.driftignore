@@ -18,3 +18,10 @@
 /etc/localtime
 /etc/os-release
 /etc/mtab
+/etc/*.pacnew
+/etc/*.pacsave
+/etc/*.bak
+/etc/*.OLD
+/etc/mkinitcpio.d/*
+/etc/xml/catalog
+/etc/brlapi.key
