@@ -54,6 +54,15 @@ stow_pkg() {
   [[ -e ~/${f#./} ]] || install -Dm644 -v "$f" ~/"${f#./}"
 done)
 
+# one-time moves for state that env.sh now routes elsewhere
+mv_once() { [[ -e $1 && ! -e $2 ]] && { mkdir -p "$(dirname "$2")"; mv -v "$1" "$2"; }; return 0; }
+mv_once ~/.zsh_history ~/.local/state/zsh/history
+mv_once ~/.cargo ~/.local/share/cargo
+mv_once ~/.npmrc ~/.config/npm/npmrc
+mv_once ~/.docker ~/.config/docker
+mv_once ~/.aws ~/.config/aws
+mv_once ~/go ~/.local/share/go
+
 say "services + shell"
 sudo systemctl enable -q --now NetworkManager bluetooth fstrim.timer systemd-timesyncd
 [[ $(getent passwd "$USER" | cut -d: -f7) == */zsh ]] || chsh -s /usr/bin/zsh

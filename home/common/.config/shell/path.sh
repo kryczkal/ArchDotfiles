@@ -5,7 +5,9 @@
 typeset -U path PATH
 path+=(
   "$HOME/.local/bin"
-  "$HOME/.cargo/bin"
+  "$XDG_DATA_HOME/cargo/bin"
+  "$XDG_DATA_HOME/go/bin"
+  "$XDG_DATA_HOME/npm/bin"
   "$HOME/.local/share/JetBrains/Toolbox/scripts"
   "$ANDROID_HOME/cmdline-tools/latest/bin"
   "$ANDROID_HOME/platform-tools"

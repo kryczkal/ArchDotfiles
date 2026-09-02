@@ -1,5 +1,4 @@
 .bash_history
-.calc_history
 .claude.json
 .config/BraveSoftware
 .config/chromium
@@ -25,4 +24,3 @@
 .viminfo
 .wget-hsts
 .zcompdump*
-.zsh_history

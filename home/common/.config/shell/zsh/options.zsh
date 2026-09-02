@@ -1,6 +1,7 @@
 # zsh options, history, completion, keys. Replaces oh-my-zsh (2026-09).
 
-HISTFILE=~/.zsh_history
+mkdir -p "$XDG_STATE_HOME/zsh"
+HISTFILE="$XDG_STATE_HOME/zsh/history"
 HISTSIZE=100000
 SAVEHIST=100000
 setopt share_history hist_ignore_dups hist_ignore_space hist_expire_dups_first extended_history
