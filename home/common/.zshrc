@@ -4,7 +4,6 @@
 # Only `source` lines, in this order. Options live in ~/.config/shell/:
 #   env.sh        exports          path.sh       PATH
 #   zsh/options.zsh  setopt/keys   aliases.sh    aliases
-#   zsh/bat-help.zsh global -h aliases (must stay last)
 #   local.sh      machine-only, secrets, gitignored
 # If a tool appended lines here, that is drift: move them to the right file.
 
@@ -23,7 +22,5 @@ source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 [[ ! -r /usr/share/clippy/clippy.zsh ]] || source /usr/share/clippy/clippy.zsh
 source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
-# Parse-time global aliases: nothing with a bare -h/--help may be parsed after this.
-source ~/.config/shell/zsh/bat-help.zsh
 # Machine-local overrides and secrets. Gitignored.
 [[ ! -f ~/.config/shell/local.sh ]] || source ~/.config/shell/local.sh

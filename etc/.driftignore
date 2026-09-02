@@ -32,5 +32,3 @@
 /etc/udev/hwdb.bin
 /etc/.updated
 /etc/xml/catalog
-# install edits pacman.conf in place (Color, ParallelDownloads)
-/etc/pacman.conf

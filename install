@@ -9,6 +9,7 @@ cd "$(dirname "${BASH_SOURCE[0]}")"
 host=$(</etc/hostname)
 say() { printf '\n\033[1;34m== %s\033[0m\n' "$*"; }
 pkgs() { sed 's/#.*//' "$@" 2>/dev/null | tr -s ' \n' '\n' | grep -v '^$'; }
+have() { pacman -Q "$1" &>/dev/null; }
 
 if [[ ${1:-} == --keys ]]; then
   [[ -f ~/.ssh/id_ed25519 ]] || ssh-keygen -t ed25519 -C "$USER@$host"
@@ -17,7 +18,6 @@ if [[ ${1:-} == --keys ]]; then
 fi
 
 say "etc/ -> /etc"
-sudo sed -i 's/^#\(Color\|ParallelDownloads\|VerbosePkgLists\)/\1/' /etc/pacman.conf
 (cd etc && find . -type f ! -name .driftignore | while read -r f; do
   mode=644; [[ $f == ./sudoers.d/* ]] && mode=440
   sudo install -CDm"$mode" "$f" "/etc/${f#./}"
@@ -58,20 +58,15 @@ stow_pkg() {
   [[ -e ~/${f#./} ]] || install -Dm644 -v "$f" ~/"${f#./}"
 done)
 
-# one-time moves for state that env.sh now routes elsewhere
-mv_once() { [[ -e $1 && ! -e $2 ]] && { mkdir -p "$(dirname "$2")"; mv -v "$1" "$2"; }; return 0; }
-mv_once ~/.zsh_history ~/.local/state/zsh/history
-mv_once ~/.cargo ~/.local/share/cargo
-mv_once ~/.npmrc ~/.config/npm/npmrc
-mv_once ~/.docker ~/.config/docker
-mv_once ~/.aws ~/.config/aws
-mv_once ~/go ~/.local/share/go
 
 say "services + shell"
-sudo systemctl enable -q --now NetworkManager bluetooth fstrim.timer systemd-timesyncd tlp
-sudo systemctl mask -q systemd-rfkill.service systemd-rfkill.socket   # tlp handles rfkill
-pacman -Q thermald &>/dev/null && sudo systemctl enable -q --now thermald
+sudo systemctl enable -q --now NetworkManager bluetooth fstrim.timer systemd-timesyncd
+if have tlp; then   # laptops only, via pkgs/host-*.txt. tlp owns rfkill.
+  sudo systemctl enable -q --now tlp
+  sudo systemctl mask -q systemd-rfkill.service systemd-rfkill.socket
+fi
+have thermald && sudo systemctl enable -q --now thermald
 systemctl --user enable -q gcr-ssh-agent.socket gnome-keyring-daemon.socket
 [[ $(getent passwd "$USER" | cut -d: -f7) == */zsh ]] || chsh -s /usr/bin/zsh
 
-say "done. next: './install --keys', then 'dots drift' and 'dots pkgs' to see what the repo does not own."
+say "done. next: './install --keys' once, './drift' for what the repo does not own."

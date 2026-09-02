@@ -1,1 +1,1 @@
-intel-ucode vulkan-intel intel-media-driver thermald
+intel-ucode vulkan-intel intel-media-driver thermald tlp

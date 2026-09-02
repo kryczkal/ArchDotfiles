@@ -1,0 +1,50 @@
+#!/bin/bash
+# drift — what this machine has that the repo does not own, and the reverse.
+# Run after install on a new machine, before wiping one, and now and then to
+# catch an installer writing into ~/.zshrc. Needs sudo for /etc.
+#   HOME  repo -> machine: every shipped file is linked (stow) or present (seed)
+#         machine -> repo: every real file in ~/.* (files, not dirs), ~/.config/**
+#         and ~/.local/bin/* (shell scripts only, pip/npm shims skipped) is owned,
+#         in home/.driftignore, or listed. Listed at the granularity you would
+#         ignore: the top entry under ~/.config when the repo owns nothing in it.
+#   ETC   repo files must match /etc byte for byte; then files pacman marks
+#         modified or no package owns, unless in the repo or etc/.driftignore
+#   PKGS  explicitly installed packages missing from pkgs/*.txt
+set -euo pipefail
+shopt -s nullglob
+cd "$(dirname "${BASH_SOURCE[0]}")"
+repo=$PWD
+pkgs() { (cd "$repo/home" && printf '%s\n' common seed host-*); }   # stow packages + seed
+shipped() { (cd "$repo/home" && find $(pkgs) -type f ! -name .gitignore | cut -d/ -f2-) | sort -u; }
+owned() { local d; for d in $(pkgs); do [[ -e $repo/home/$d/$1 ]] && return 0; done; return 1; }
+prune=(); while read -r pat; do [[ -n $pat && $pat != \#* ]] && prune+=(-path ~/"$pat" -o); done < home/.driftignore
+
+echo "## HOME"
+shipped | while read -r rel; do
+  if [[ -e $repo/home/seed/$rel ]]; then [[ -e ~/$rel ]] || echo "  $rel  (seed missing, run install)"
+  else [[ -L ~/$rel ]] || echo "  $rel  (not linked, run install)"; fi
+done
+{ find ~ -mindepth 1 -maxdepth 1 -type f -name '.*' \( "${prune[@]}" -false \) -prune -o -type f -name '.*' -print
+  find ~/.config ~/.local/bin \( "${prune[@]}" -false \) -prune -o -type f -print; } | sort |
+while read -r f; do
+  rel=${f#"$HOME"/}
+  owned "$rel" && continue
+  [[ $rel == .local/bin/* ]] && ! head -1 "$f" | grep -qE '^#!.*\b(ba|z)?sh\b' && continue
+  key=$(cut -d/ -f1-2 <<<"$rel")
+  if [[ $key != "$rel" ]] && ! owned "$key"; then echo "  $key/"; else echo "  $rel"; fi
+done | sort -u
+
+echo "## ETC"
+(cd etc && find . -type f ! -name .driftignore | cut -c3-) | while read -r rel; do
+  sudo cmp -s "etc/$rel" "/etc/$rel" || echo "  /etc/$rel  (differs from repo, run install or copy back)"
+done
+{ pacman -Qii 2>/dev/null | grep -oE '/etc/\S+ \[modified\]' | cut -d' ' -f1
+  comm -23 <(sudo find /etc -type f | sort) <(pacman -Qlq | grep '^/etc/' | sort); } | sort -u |
+while read -r f; do
+  [[ -e etc/${f#/etc/} ]] && continue
+  skip=0; while read -r pat; do [[ -n $pat && $pat != \#* && $f == $pat ]] && { skip=1; break; }; done < etc/.driftignore
+  (( skip )) || echo "  $f"
+done
+
+echo "## PKGS"
+comm -23 <(pacman -Qqe | sort) <(sed 's/#.*//' pkgs/*.txt | tr -s ' \n' '\n' | grep -v '^$' | sort -u) | sed 's/^/  /'

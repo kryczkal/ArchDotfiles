@@ -10,5 +10,4 @@ ripgrep fd curl unzip                                   # for: nvim (LazyVim pic
 bat lsd                                                 # for: aliases.sh (cat, ls)
 pipewire pipewire-pulse wireplumber                     # audio
 bluez bluez-utils                                       # bluetooth, bluetoothctl to pair
-tlp                                                     # battery
 xdg-utils                                               # xdg-open

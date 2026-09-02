@@ -1,4 +1,5 @@
 .bash_history
+.calc_history
 .claude.json
 .config/BraveSoftware
 .config/chromium
@@ -21,6 +22,7 @@
 .config/user-dirs.dirs
 .config/user-dirs.locale
 .lesshst
+.npmrc
 .python_history
 .viminfo
 .wget-hsts
