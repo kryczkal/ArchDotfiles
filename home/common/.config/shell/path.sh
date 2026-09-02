@@ -1,4 +1,4 @@
-# path.sh: PATH entries only. Managed by stow (ArchDotfiles).
+# path.sh: PATH entries only. Managed by stow (ArchDotfiles). Sourced by .zshenv and .zshrc.
 # Not here: exports (env.sh). Needs env.sh first. typeset -U dedupes, so
 # double-sourcing is safe. An installer that appends PATH to .zshrc/.profile
 # is drift: move the line here.

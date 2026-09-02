@@ -1,7 +1,7 @@
 # env.sh: exported variables only. Managed by stow (ArchDotfiles).
 # Not here: PATH (path.sh), aliases (aliases.sh), setopt/bindkey/completion
 # (zsh/options.zsh), secrets and machine-only values (local.sh, gitignored).
-# Sourced twice (.zprofile, .zshrc): every line must be idempotent.
+# Sourced twice (.zshenv, .zshrc): every line must be idempotent.
 # Loads before path.sh: path.sh uses XDG_DATA_HOME and ANDROID_HOME.
 
 export XDG_CONFIG_HOME="$HOME/.config"

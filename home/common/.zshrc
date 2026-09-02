@@ -1,4 +1,6 @@
 # .zshrc: interactive-shell loader. Managed by stow (ArchDotfiles).
+# .zshenv loads env.sh + path.sh for every shell; they are re-sourced here
+# because /etc/profile runs in between for login shells.
 # Only `source` lines, in this order. Options live in ~/.config/shell/:
 #   env.sh        exports          path.sh       PATH
 #   zsh/options.zsh  setopt/keys   aliases.sh    aliases
