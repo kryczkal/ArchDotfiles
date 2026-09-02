@@ -24,6 +24,7 @@
 .config/user-dirs.locale
 .lesshst
 .npmrc
+.pulse-cookie
 .python_history
 .viminfo
 .wget-hsts
