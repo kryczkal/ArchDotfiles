@@ -1,0 +1,10 @@
+[user]
+	name = Łukasz Kryczka
+	email = lukasz.kryczka000@gmail.com
+[commit]
+	gpgsign = true
+[core]
+	editor = nvim -f
+[include]
+	# machine-local: signingkey, credentials. Not in the repo.
+	path = ~/.config/git/local

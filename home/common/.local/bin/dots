@@ -4,6 +4,7 @@
 #   dots sync         stage all, commit with a summary, push
 #   dots drift        config on this machine the repo does not own
 #   dots pkgs         explicitly installed packages not listed in pkgs/*.txt
+#   dots ignore P...  add paths (globs ok) to home/.driftignore
 set -euo pipefail
 repo=${DOTFILES:-$HOME/ArchDotfiles}
 
@@ -18,10 +19,13 @@ sync)
 drift)
   echo "## HOME: real files where the repo is not the owner (add app state to home/.driftignore)"
   ign="$repo/home/.driftignore"
+  # ~ top level: files only (dot-dirs there are app state). ~/.config: files and dirs.
   for p in ~/.[!.]* ~/.config/* ~/.local/bin/*; do
     [[ -e $p && ! -L $p ]] || continue
     rel=${p#"$HOME"/}
-    [[ -f $ign ]] && grep -qxF -- "$rel" "$ign" && continue
+    [[ $rel != */* && -d $p ]] && continue
+    ignored=0; while read -r pat; do [[ -n $pat && $rel == $pat ]] && { ignored=1; break; }; done < "$ign"
+    (( ignored )) && continue
     [[ $rel == .local/bin/* && -f $p ]] && ! head -1 "$p" | grep -qE '^#!.*\b(ba|z)?sh\b' && continue  # pip/npm shims
     echo "  $rel"
   done
@@ -34,6 +38,9 @@ drift)
   comm -23 <(sudo find /etc -type f | sort) <(pacman -Qlq | grep '^/etc/' | sort) |
     { [[ -f $ign ]] && grep -vEf <(sed 's/[.]/\\./g; s/\*/.*/g; s|^|^|' "$ign") || cat; } |
     while read -r f; do [[ -e $repo/etc/${f#/etc/} ]] || echo "  $f"; done
+  ;;
+ignore)
+  shift; printf '%s\n' "$@" >> "$repo/home/.driftignore"; sort -u -o "$repo/home/.driftignore" "$repo/home/.driftignore"
   ;;
 pkgs)
   comm -23 <(pacman -Qqe | sort) <(sed 's/#.*//' "$repo"/pkgs/*.txt | tr -s ' \n' '\n' | grep -v '^$' | sort -u)
