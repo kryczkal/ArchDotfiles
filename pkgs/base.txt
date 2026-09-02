@@ -1,8 +1,14 @@
-# Always. pacman. Conservative: add a package only when something needs it.
-base base-devel linux linux-firmware sof-firmware
-networkmanager openssh sudo git stow curl
-zsh zsh-autosuggestions zsh-syntax-highlighting
-neovim tmux ripgrep fd bat lsd man-db
-zram-generator e2fsprogs dosfstools
-pipewire pipewire-pulse pipewire-alsa wireplumber bluez bluez-utils
-tlp xdg-utils
+# Always. pacman. Rule: every line has a reason. Add a package only when
+# something you run does not run without it, and say what.
+base linux linux-firmware sudo networkmanager openssh   # boots, connects, sudo, ssh
+base-devel git stow                                     # install itself, paru builds
+sof-firmware                                            # audio firmware, Raptor Lake needs it
+zram-generator e2fsprogs dosfstools                     # swap, fsck for ext4 root + vfat EFI
+zsh zsh-autosuggestions zsh-syntax-highlighting         # shell
+neovim tmux man-db                                      # editor, multiplexer, man
+ripgrep fd curl unzip                                   # for: nvim (LazyVim pickers, Mason downloads)
+bat lsd                                                 # for: aliases.sh (cat, ls)
+pipewire pipewire-pulse wireplumber                     # audio
+bluez bluez-utils                                       # bluetooth, bluetoothctl to pair
+tlp                                                     # battery
+xdg-utils                                               # xdg-open

@@ -1,7 +1,8 @@
 # River desktop with a browser. pacman. mesa is a dep of river-classic.
-river-classic waybar rofi mako libnotify alacritty
-swayidle waylock wl-clipboard grim slurp brightnessctl
-xdg-desktop-portal xdg-desktop-portal-wlr xdg-desktop-portal-gtk
-gnome-keyring polkit udisks2 udiskie
-ttf-meslo-nerd noto-fonts noto-fonts-emoji
-yazi
+river-classic waybar rofi mako alacritty                # wm, bar, launcher, notifications, terminal
+swayidle waylock                                        # idle lock, lock before sleep
+grim slurp wl-clipboard                                 # for: river init Print binding, nvim clipboard
+xdg-desktop-portal xdg-desktop-portal-wlr xdg-desktop-portal-gtk   # screen share + file dialogs in Brave
+gnome-keyring                                           # for: river init (secrets, ssh agent)
+ttf-meslo-nerd noto-fonts noto-fonts-emoji              # terminal/p10k font, browser fonts, emoji
+yazi                                                    # for: river init Super+E
