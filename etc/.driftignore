@@ -32,3 +32,19 @@
 /etc/udev/hwdb.bin
 /etc/.updated
 /etc/xml/catalog
+# machine-local (PipeKiller), decided 2026-09-04
+/etc/brave/policies/*
+/etc/chromium/policies/*
+/etc/default/grub
+/etc/docker/daemon.json*
+/etc/environment
+/etc/fuse.conf
+/etc/glusterfs/*
+/etc/makepkg.conf.d/*
+/etc/modprobe.d/zz-rtw89-local.conf
+/etc/NetworkManager/NetworkManager.conf
+/etc/nextdns-guard/*
+/etc/nginx/*
+/etc/systemd/system/*.slice
+/etc/systemd/system/proxy-guard.*
+/etc/tpm2-tss/*
